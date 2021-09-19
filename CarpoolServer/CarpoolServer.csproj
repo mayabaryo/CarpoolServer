@@ -12,9 +12,4 @@
     <ProjectReference Include="..\CarpoolServerBL\CarpoolServerBL.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DTO\" />
-    <Folder Include="Wwwroot\" />
-  </ItemGroup>
-
 </Project>

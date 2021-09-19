@@ -19,5 +19,12 @@ namespace CarpoolServer.Controllers
             this.context = context;
         }
         #endregion
+
+        [Route("GetString")]
+        [HttpGet]
+        public string GetPhoneTypes()
+        {
+            return "HELLO WORLD";
+        }
     }
 }
