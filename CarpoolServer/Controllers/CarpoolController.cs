@@ -22,7 +22,7 @@ namespace CarpoolServer.Controllers
 
         [Route("GetString")]
         [HttpGet]
-        public string GetPhoneTypes()
+        public string GetString()
         {
             return "HELLO WORLD";
         }
