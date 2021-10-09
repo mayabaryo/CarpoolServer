@@ -45,11 +45,12 @@ namespace CarpoolServer.Controllers
 
         [Route("SignUp")]
         [HttpGet]
-        public User SignUp([FromQuery] string email, [FromQuery] string pass, [FromQuery] string fName, [FromQuery] string lName)
+        public User SignUp([FromQuery] string email, /*[FromQuery] string userName,*/ [FromQuery] string pass, [FromQuery] string fName, [FromQuery] string lName)
         {
             User user = new User()
             {
                 Email = email,
+                //UserName = userName,
                 UserPswd = pass,
                 FirstName = fName,
                 LastName = lName
