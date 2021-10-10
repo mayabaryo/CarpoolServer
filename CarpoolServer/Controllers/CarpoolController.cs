@@ -22,9 +22,9 @@ namespace CarpoolServer.Controllers
 
         [Route("Login")]
         [HttpGet]
-        public User Login([FromQuery] string email, [FromQuery] string pass)
+        public User Login([FromQuery] string email, [FromQuery] string userName, [FromQuery] string pass)
         {
-            User user = context.Login(email, pass);
+            User user = context.Login(email, userName, pass);
 
             //Check user name and password
             if (user != null)
@@ -45,21 +45,31 @@ namespace CarpoolServer.Controllers
 
         [Route("SignUp")]
         [HttpGet]
-        public User SignUp([FromQuery] string email, /*[FromQuery] string userName,*/ [FromQuery] string pass, [FromQuery] string fName, [FromQuery] string lName)
+        public User SignUp([FromQuery] string email, [FromQuery] string userName, [FromQuery] string pass,
+            [FromQuery] string fName, [FromQuery] string lName, [FromQuery] DateTime birthDate,
+            [FromQuery] string phoneNumber, [FromQuery] string photo, [FromQuery] string city,
+            [FromQuery] string neighborhood, [FromQuery] string street, [FromQuery] string houseNum)
         {
             User user = new User()
             {
                 Email = email,
-                //UserName = userName,
+                UserName = userName,
                 UserPswd = pass,
                 FirstName = fName,
-                LastName = lName
+                LastName = lName,
+                BirthDate = birthDate,
+                PhoneNum = phoneNumber,
+                Photo = photo,
+                City = city,
+                Neighborhood = neighborhood,
+                Street = street,
+                HouseNum = houseNum
             };
 
             //Check user name and password
             if (user != null)
             {
-                this.context.AddUser(user);
+                this.context.AddAdult((Adult)user);
                 HttpContext.Session.SetObject("theUser", user);
                 Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
                 //Important! Due to the Lazy Loading, the user will be returned with all of its contects!!
