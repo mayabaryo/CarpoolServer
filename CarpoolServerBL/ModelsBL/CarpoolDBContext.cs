@@ -10,12 +10,12 @@ namespace CarpoolServerBL.Models
 {
     public partial class CarpoolDBContext : DbContext
     {
-        public User Login(string email, string userName, string pswd)
+        public User Login(string email, string pswd)
         {
             User user = this.Users
                 //.Include(us => us.UserContacts)
                 //.ThenInclude(uc => uc.ContactPhones)
-                .Where(u => (u.Email == email || u.UserName == userName) && u.UserPswd == pswd).FirstOrDefault();
+                .Where(u => (u.Email == email || u.UserName == email) && u.UserPswd == pswd).FirstOrDefault();
             return user;
         }
 
