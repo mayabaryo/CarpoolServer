@@ -126,7 +126,7 @@ namespace CarpoolServerBL.Models
             modelBuilder.Entity<CarpoolStatus>(entity =>
             {
                 entity.HasKey(e => e.StatusId)
-                    .HasName("PK__CarpoolS__C8EE20439EC4AFD3");
+                    .HasName("PK__CarpoolS__C8EE20431BB3234F");
 
                 entity.ToTable("CarpoolStatus");
 
@@ -216,7 +216,7 @@ namespace CarpoolServerBL.Models
             modelBuilder.Entity<RequestCarpoolStatus>(entity =>
             {
                 entity.HasKey(e => e.RequestId)
-                    .HasName("PK__RequestC__33A8519A365CC45F");
+                    .HasName("PK__RequestC__33A8519A8860F08E");
 
                 entity.ToTable("RequestCarpoolStatus");
 
@@ -300,7 +300,7 @@ namespace CarpoolServerBL.Models
 
                 entity.Property(e => e.Photo)
                     .IsRequired()
-                    .HasMaxLength(30);
+                    .HasMaxLength(1);
 
                 entity.Property(e => e.Street)
                     .IsRequired()

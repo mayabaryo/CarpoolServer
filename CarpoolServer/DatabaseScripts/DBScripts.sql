@@ -1,8 +1,14 @@
 ﻿INSERT INTO Users VALUES ('kuku@kuku.com','kuku','kaka','1234');
 GO
 
---CREATE
+--scaffold-dbcontext "Server=localhost\sqlexpress;Database=CarpoolDB;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models –force
 
+--<binding protocol="http" bindingInformation="*:13939:localhost" />
+--<binding protocol="https" bindingInformation="*:44319:localhost" />
+--<binding protocol="http" bindingInformation="*:13939:127.0.0.1" />
+--<binding protocol="https" bindingInformation="*:44319:127.0.0.1" />
+
+--CREATE
 Use master
 Create Database CarpoolDB
 Go
@@ -19,7 +25,7 @@ LastName nvarchar(30) not null,
 UserPswd nvarchar(30) not null,
 BirthDate datetime not null,
 PhoneNum nvarchar(30) not null,
-Photo nvarchar(30) not null,
+Photo nvarchar not null,
 City nvarchar(30) not null,
 Neighborhood nvarchar(30) not null,
 Street nvarchar(30) not null,
@@ -104,7 +110,6 @@ RequestStatusID int not null FOREIGN KEY REFERENCES RequestCarpoolStatus(Request
 Go
 
 --INSERT
-
 INSERT INTO CarpoolStatus VALUES ('NotStarted')
 INSERT INTO CarpoolStatus VALUES ('InProcess')
 INSERT INTO CarpoolStatus VALUES ('Ended')
