@@ -50,7 +50,7 @@ namespace CarpoolServer.Controllers
         //    [FromQuery] string fName, [FromQuery] string lName, [FromQuery] DateTime birthDate,
         //    [FromQuery] string phoneNumber, [FromQuery] string photo, [FromQuery] string city,
         //    [FromQuery] string neighborhood, [FromQuery] string street, [FromQuery] string houseNum
-        public Adult AdultSignUp(Adult adult)
+        public Adult AdultSignUp([FromBody] Adult adult)
         {
             //User user = new User()
             //{

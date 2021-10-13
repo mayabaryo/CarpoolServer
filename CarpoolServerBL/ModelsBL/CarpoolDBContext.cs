@@ -24,8 +24,13 @@ namespace CarpoolServerBL.Models
         //    this.Users.Add(user);
         //    this.SaveChanges();
         //}
-        public void AddAdult(Adult adult)
+        public  void AddAdult(Adult adult)
         {
+            //this.Entry(adult).State = EntityState.Added;
+            //this.SaveChanges();
+            //adult.IdNavigation.Id = adult.Id;
+            //this.Entry(adult.IdNavigation).State = EntityState.Added;
+            //this.SaveChanges();
             this.Adults.Add(adult);
             this.SaveChanges();
         }

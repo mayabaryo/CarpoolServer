@@ -82,7 +82,7 @@ namespace CarpoolServerBL.Models
             modelBuilder.Entity<Adult>(entity =>
             {
                 entity.Property(e => e.Id)
-                    .ValueGeneratedOnAdd()
+                    .ValueGeneratedNever()
                     .HasColumnName("ID");
 
                 entity.HasOne(d => d.IdNavigation)
@@ -126,7 +126,7 @@ namespace CarpoolServerBL.Models
             modelBuilder.Entity<CarpoolStatus>(entity =>
             {
                 entity.HasKey(e => e.StatusId)
-                    .HasName("PK__CarpoolS__C8EE20431BB3234F");
+                    .HasName("PK__CarpoolS__C8EE204309ECFBAB");
 
                 entity.ToTable("CarpoolStatus");
 
@@ -140,7 +140,7 @@ namespace CarpoolServerBL.Models
             modelBuilder.Entity<Kid>(entity =>
             {
                 entity.Property(e => e.Id)
-                    .ValueGeneratedOnAdd()
+                    .ValueGeneratedNever()
                     .HasColumnName("ID");
 
                 entity.HasOne(d => d.IdNavigation)
@@ -216,7 +216,7 @@ namespace CarpoolServerBL.Models
             modelBuilder.Entity<RequestCarpoolStatus>(entity =>
             {
                 entity.HasKey(e => e.RequestId)
-                    .HasName("PK__RequestC__33A8519A8860F08E");
+                    .HasName("PK__RequestC__33A8519AAA0E9F27");
 
                 entity.ToTable("RequestCarpoolStatus");
 
@@ -300,7 +300,7 @@ namespace CarpoolServerBL.Models
 
                 entity.Property(e => e.Photo)
                     .IsRequired()
-                    .HasMaxLength(1);
+                    .HasMaxLength(200);
 
                 entity.Property(e => e.Street)
                     .IsRequired()

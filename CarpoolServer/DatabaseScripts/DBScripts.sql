@@ -17,7 +17,7 @@ Use CarpoolDB
 Go
 
 Create Table Users (
-ID int Identity primary key,
+ID int identity(1,1) primary key,
 Email nvarchar(100) not null,
 UserName nvarchar(30) not null,
 FirstName nvarchar(30) not null,
@@ -25,7 +25,7 @@ LastName nvarchar(30) not null,
 UserPswd nvarchar(30) not null,
 BirthDate datetime not null,
 PhoneNum nvarchar(30) not null,
-Photo nvarchar not null,
+Photo nvarchar(200) not null,
 City nvarchar(30) not null,
 Neighborhood nvarchar(30) not null,
 Street nvarchar(30) not null,
@@ -37,12 +37,12 @@ CONSTRAINT UC_UserName UNIQUE(UserName)
 Go
 
 CREATE TABLE Adults (
-ID int Identity primary key REFERENCES Users(ID)
+ID int primary key REFERENCES Users(ID)
 );
 Go
 
 CREATE TABLE Kids (
-ID int Identity primary key REFERENCES Users(ID)
+ID int primary key REFERENCES Users(ID)
 );
 Go
 
