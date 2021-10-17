@@ -8,6 +8,13 @@ GO
 --<binding protocol="http" bindingInformation="*:13939:127.0.0.1" />
 --<binding protocol="https" bindingInformation="*:44319:127.0.0.1" />
 
+--<binding protocol="http" bindingInformation="*:13939:localhost" />
+--<binding protocol="https" bindingInformation="*:44319:localhost" />
+--<binding protocol="http" bindingInformation="*:13939:127.0.0.1" />
+--<binding protocol="https" bindingInformation="*:44319:127.0.0.1" />
+--<binding protocol="http" bindingInformation="*:13939:10.100.102.22" />
+--<binding protocol="https" bindingInformation="*:44319:10.100.102.22" />
+
 --CREATE
 Use master
 Create Database CarpoolDB
