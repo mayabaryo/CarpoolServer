@@ -45,34 +45,8 @@ namespace CarpoolServer.Controllers
 
         [Route("AdultSignUp")]
         [HttpPost]
-
-        //[FromQuery] string email, [FromQuery] string userName, [FromQuery] string pass,
-        //    [FromQuery] string fName, [FromQuery] string lName, [FromQuery] DateTime birthDate,
-        //    [FromQuery] string phoneNumber, [FromQuery] string photo, [FromQuery] string city,
-        //    [FromQuery] string neighborhood, [FromQuery] string street, [FromQuery] string houseNum
         public Adult AdultSignUp([FromBody] Adult adult)
         {
-            //User user = new User()
-            //{
-            //    Email = email,
-            //    UserName = userName,
-            //    UserPswd = pass,
-            //    FirstName = fName,
-            //    LastName = lName,
-            //    BirthDate = birthDate,
-            //    PhoneNum = phoneNumber,
-            //    Photo = photo,
-            //    City = city,
-            //    Neighborhood = neighborhood,
-            //    Street = street,
-            //    HouseNum = houseNum
-            //};
-
-            //Adult adult = new Adult()
-            //{
-            //    IdNavigation = user
-            //};
-
             //Check user name and password
             if (adult != null)
             {
