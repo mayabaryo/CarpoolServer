@@ -40,7 +40,7 @@ namespace CarpoolServerBL.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "Hebrew_CI_AS");
+            modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
             modelBuilder.Entity<Activity>(entity =>
             {
@@ -126,7 +126,7 @@ namespace CarpoolServerBL.Models
             modelBuilder.Entity<CarpoolStatus>(entity =>
             {
                 entity.HasKey(e => e.StatusId)
-                    .HasName("PK__CarpoolS__C8EE204309ECFBAB");
+                    .HasName("PK__CarpoolS__C8EE204386F21EC1");
 
                 entity.ToTable("CarpoolStatus");
 
@@ -216,7 +216,7 @@ namespace CarpoolServerBL.Models
             modelBuilder.Entity<RequestCarpoolStatus>(entity =>
             {
                 entity.HasKey(e => e.RequestId)
-                    .HasName("PK__RequestC__33A8519AAA0E9F27");
+                    .HasName("PK__RequestC__33A8519A56381E9C");
 
                 entity.ToTable("RequestCarpoolStatus");
 
@@ -279,10 +279,6 @@ namespace CarpoolServerBL.Models
                     .HasMaxLength(100);
 
                 entity.Property(e => e.FirstName)
-                    .IsRequired()
-                    .HasMaxLength(30);
-
-                entity.Property(e => e.HouseNum)
                     .IsRequired()
                     .HasMaxLength(30);
 
