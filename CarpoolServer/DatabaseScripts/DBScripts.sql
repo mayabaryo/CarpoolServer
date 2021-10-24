@@ -36,7 +36,7 @@ Photo nvarchar(200) not null,
 City nvarchar(30) not null,
 Neighborhood nvarchar(30) not null,
 Street nvarchar(30) not null,
-HouseNum nvarchar(30) not null,
+HouseNum int not null,
 
 CONSTRAINT UC_Email UNIQUE(Email),
 CONSTRAINT UC_UserName UNIQUE(UserName)

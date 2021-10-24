@@ -68,7 +68,7 @@ namespace CarpoolServer.Controllers
         public Kid KidSignUp([FromQuery] string email, [FromQuery] string userName, [FromQuery] string pass,
             [FromQuery] string fName, [FromQuery] string lName, [FromQuery] DateTime birthDate,
             [FromQuery] string phoneNumber, [FromQuery] string photo, [FromQuery] string city,
-            [FromQuery] string neighborhood, [FromQuery] string street, [FromQuery] string houseNum)
+            [FromQuery] string neighborhood, [FromQuery] string street, [FromQuery] int houseNum)
         {
             User user = new User()
             {
