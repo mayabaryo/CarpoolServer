@@ -52,6 +52,8 @@ namespace CarpoolServer.Controllers
             if (adult != null)
             {
                 this.context.AddAdult(adult);
+                //adult.IdNavigation.Photo = $"{adult.Id}.jpg";
+                //this.context.SaveChanges();
                 HttpContext.Session.SetObject("theUser", adult);
                 Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
                 //Important! Due to the Lazy Loading, the user will be returned with all of its contects!!
