@@ -12,18 +12,66 @@ namespace CarpoolServerBL.Models
     {
         public User Login(string email, string pswd)
         {
-            User user = this.Users
+            try
+            {
+                User user = this.Users
                 //.Include(us => us.UserContacts)
                 //.ThenInclude(uc => uc.ContactPhones)
                 .Where(u => (u.Email == email || u.UserName == email) && u.UserPswd == pswd).FirstOrDefault();
-            return user;
+                return user;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
         }
 
-        //public void AddUser(User user)
-        //{
-        //    this.Users.Add(user);
-        //    this.SaveChanges();
-        //}
+        public User EmailExist(string email)
+        {
+            try
+            {
+                User user = this.Users
+                .Where(u => u.Email == email).FirstOrDefault();
+                return user;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+        }
+
+        public User UserNameExist(string userName)
+        {
+            try
+            {
+                User user = this.Users
+                .Where(u => u.UserName == userName).FirstOrDefault();
+                return user;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }        
+        }
+
+        public Adult AdultExist(User user)
+        {
+            try
+            {
+                Adult adult = this.Adults
+                .Where(a => a.IdNavigation == user).FirstOrDefault();
+                return adult;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+        }
+
         public void AddAdult(Adult adult)
         {
             try
@@ -38,20 +86,15 @@ namespace CarpoolServerBL.Models
         }
         public void AddKid(Kid kid)
         {
-            this.Kids.Add(kid);
-            this.SaveChanges();
+            try
+            {
+                this.Kids.Add(kid);
+                this.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
-
-        //public User SignUp(string email, string pswd, string fName, string lName)
-        //{
-        //    User user = new User()
-        //    {
-        //        Email=email,
-        //        UserPswd=pswd,
-        //        FirstName = fName,
-        //        LastName = lName
-        //    };
-        //    return user;
-        //}
     }
 }
