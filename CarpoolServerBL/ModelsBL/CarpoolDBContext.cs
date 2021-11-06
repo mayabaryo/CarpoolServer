@@ -27,33 +27,29 @@ namespace CarpoolServerBL.Models
             }
         }
 
-        public User EmailExist(string email)
+        public bool EmailExist(string email)
         {
             try
             {
-                User user = this.Users
-                .Where(u => u.Email == email).FirstOrDefault();
-                return user;
+                return this.Users.Any(u => u.Email == email);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                return null;
+                return true;
             }
         }
 
-        public User UserNameExist(string userName)
+        public bool UserNameExist(string userName)
         {
             try
             {
-                User user = this.Users
-                .Where(u => u.UserName == userName).FirstOrDefault();
-                return user;
+                return this.Users.Any(u => u.UserName == userName);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                return null;
+                return true;
             }        
         }
 

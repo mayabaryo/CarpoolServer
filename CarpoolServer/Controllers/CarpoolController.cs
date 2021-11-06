@@ -46,47 +46,35 @@ namespace CarpoolServer.Controllers
 
         [Route("IsEmailExist")]
         [HttpGet]
-        public User IsEmailExist([FromQuery] string email)
+        public bool IsEmailExist([FromQuery] string email)
         {
-            User user = this.context.EmailExist(email);
-
-            //Check user name and password
-            if (user != null)
+            bool isExist = this.context.EmailExist(email);
+            if (isExist)
             {
-                //HttpContext.Session.SetObject("theUser", user);
-
                 Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-
-                //Important! Due to the Lazy Loading, the user will be returned with all of its contects!!
-                return user;
+                return true;
             }
             else
             {
                 Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
-                return null;
+                return false;
             }
         }
 
         [Route("IsUserNameExist")]
         [HttpGet]
-        public User IsUserNameExist([FromQuery] string userName)
+        public bool IsUserNameExist([FromQuery] string userName)
         {
-            User user = this.context.UserNameExist(userName);
-
-            //Check user name and password
-            if (user != null)
+            bool isExist = this.context.UserNameExist(userName);
+            if (isExist)
             {
-                //HttpContext.Session.SetObject("theUser", user);
-
                 Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-
-                //Important! Due to the Lazy Loading, the user will be returned with all of its contects!!
-                return user;
+                return true;
             }
             else
             {
                 Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
-                return null;
+                return false;
             }
         }
 
