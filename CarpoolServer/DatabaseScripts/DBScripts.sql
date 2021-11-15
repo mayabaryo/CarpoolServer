@@ -126,3 +126,17 @@ INSERT INTO RequestCarpoolStatus VALUES ('Accepted')
 INSERT INTO RequestCarpoolStatus VALUES ('Declined')
 INSERT INTO RequestCarpoolStatus VALUES ('New')
 Go
+
+-------
+
+ALter Table KidsOfAdults
+Add Constraint PK_KidsOfAdults Primary Key (AdultID, KidID)
+Go
+
+ALter Table KidsInActivities
+Add Constraint PK_KidsInActivities Primary Key (KidID, ActivityID)
+Go
+
+ALter Table KidsInCarpools
+Add Constraint PK_KidsInCarpools Primary Key (KidID, CarpoolID)
+Go

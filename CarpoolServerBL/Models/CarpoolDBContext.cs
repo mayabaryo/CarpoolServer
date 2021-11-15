@@ -40,7 +40,7 @@ namespace CarpoolServerBL.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
+            modelBuilder.HasAnnotation("Relational:Collation", "Hebrew_CI_AS");
 
             modelBuilder.Entity<Activity>(entity =>
             {
@@ -126,7 +126,7 @@ namespace CarpoolServerBL.Models
             modelBuilder.Entity<CarpoolStatus>(entity =>
             {
                 entity.HasKey(e => e.StatusId)
-                    .HasName("PK__CarpoolS__C8EE204386F21EC1");
+                    .HasName("PK__CarpoolS__C8EE2043CF63C13B");
 
                 entity.ToTable("CarpoolStatus");
 
@@ -152,20 +152,20 @@ namespace CarpoolServerBL.Models
 
             modelBuilder.Entity<KidsInActivity>(entity =>
             {
-                entity.HasNoKey();
-
-                entity.Property(e => e.ActivityId).HasColumnName("ActivityID");
+                entity.HasKey(e => new { e.KidId, e.ActivityId });
 
                 entity.Property(e => e.KidId).HasColumnName("KidID");
 
+                entity.Property(e => e.ActivityId).HasColumnName("ActivityID");
+
                 entity.HasOne(d => d.Activity)
-                    .WithMany()
+                    .WithMany(p => p.KidsInActivities)
                     .HasForeignKey(d => d.ActivityId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__KidsInAct__Activ__33D4B598");
 
                 entity.HasOne(d => d.Kid)
-                    .WithMany()
+                    .WithMany(p => p.KidsInActivities)
                     .HasForeignKey(d => d.KidId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__KidsInAct__KidID__32E0915F");
@@ -173,20 +173,20 @@ namespace CarpoolServerBL.Models
 
             modelBuilder.Entity<KidsInCarpool>(entity =>
             {
-                entity.HasNoKey();
-
-                entity.Property(e => e.CarpoolId).HasColumnName("CarpoolID");
+                entity.HasKey(e => new { e.KidId, e.CarpoolId });
 
                 entity.Property(e => e.KidId).HasColumnName("KidID");
 
+                entity.Property(e => e.CarpoolId).HasColumnName("CarpoolID");
+
                 entity.HasOne(d => d.Carpool)
-                    .WithMany()
+                    .WithMany(p => p.KidsInCarpools)
                     .HasForeignKey(d => d.CarpoolId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__KidsInCar__Carpo__3D5E1FD2");
 
                 entity.HasOne(d => d.Kid)
-                    .WithMany()
+                    .WithMany(p => p.KidsInCarpools)
                     .HasForeignKey(d => d.KidId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__KidsInCar__KidID__3C69FB99");
@@ -194,20 +194,20 @@ namespace CarpoolServerBL.Models
 
             modelBuilder.Entity<KidsOfAdult>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => new { e.AdultId, e.KidId });
 
                 entity.Property(e => e.AdultId).HasColumnName("AdultID");
 
                 entity.Property(e => e.KidId).HasColumnName("KidID");
 
                 entity.HasOne(d => d.Adult)
-                    .WithMany()
+                    .WithMany(p => p.KidsOfAdults)
                     .HasForeignKey(d => d.AdultId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__KidsOfAdu__Adult__2D27B809");
 
                 entity.HasOne(d => d.Kid)
-                    .WithMany()
+                    .WithMany(p => p.KidsOfAdults)
                     .HasForeignKey(d => d.KidId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__KidsOfAdu__KidID__2E1BDC42");
@@ -216,7 +216,7 @@ namespace CarpoolServerBL.Models
             modelBuilder.Entity<RequestCarpoolStatus>(entity =>
             {
                 entity.HasKey(e => e.RequestId)
-                    .HasName("PK__RequestC__33A8519A56381E9C");
+                    .HasName("PK__RequestC__33A8519AEDB635DE");
 
                 entity.ToTable("RequestCarpoolStatus");
 

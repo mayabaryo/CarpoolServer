@@ -10,6 +10,7 @@ namespace CarpoolServerBL.Models
         public Activity()
         {
             Carpools = new HashSet<Carpool>();
+            KidsInActivities = new HashSet<KidsInActivity>();
         }
 
         public int Id { get; set; }
@@ -26,5 +27,6 @@ namespace CarpoolServerBL.Models
 
         public virtual Adult Adult { get; set; }
         public virtual ICollection<Carpool> Carpools { get; set; }
+        public virtual ICollection<KidsInActivity> KidsInActivities { get; set; }
     }
 }
