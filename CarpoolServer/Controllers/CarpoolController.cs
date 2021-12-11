@@ -1,6 +1,7 @@
 ﻿using CarpoolServerBL.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -21,6 +22,9 @@ namespace CarpoolServer.Controllers
         }
         #endregion
 
+        //set the user default photo image name
+        public const string DEFAULT_PHOTO = "defaultphoto.jpg";
+
         [Route("Login")]
         [HttpGet]
         public User Login([FromQuery] string email, [FromQuery] string pass)
@@ -36,6 +40,86 @@ namespace CarpoolServer.Controllers
 
                 //Important! Due to the Lazy Loading, the user will be returned with all of its contects!!
                 return user;
+            }
+            else
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return null;
+            }
+        }
+
+        [Route("UpdateUser")]
+        [HttpPost]
+        public User UpdateUser([FromBody] User user)
+        {
+            //If user is null the request is bad
+            if (user == null)
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.BadRequest;
+                return null;
+            }
+
+            User currentUser = HttpContext.Session.GetObject<User>("theUser");
+            //Check if user logged in and its ID is the same as the contact user ID
+            if (currentUser != null && currentUser.Id == user.Id)
+            {
+                User updatedUser = context.UpdateUser(currentUser, user);
+
+                if (updatedUser == null)
+                {
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                    return null;
+                }
+
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                return updatedUser;
+
+                //currentUser.FirstName = user.FirstName;
+                //currentUser.LastName = user.LastName;
+                //currentUser.UserPswd = user.UserPswd;
+                //currentUser.BirthDate = user.BirthDate;
+                //currentUser.PhoneNum = user.PhoneNum;
+                //currentUser.City = user.City;
+                //currentUser.Neighborhood = user.Neighborhood;
+                //currentUser.Street = user.Street;
+                //currentUser.HouseNum = user.HouseNum;
+
+                ////update contact to the DB by marking all entities that should be modified or added
+                //if (user.Id > 0)
+                //{
+                //    context.Entry(user).State = EntityState.Modified;
+                //}
+                //else
+                //{
+                //    context.Entry(user).State = EntityState.Added;
+                //}
+
+                //foreach (ContactPhone cp in user.ContactPhones)
+                //{
+                //    if (cp.PhoneId > 0)
+                //    {
+                //        context.Entry(cp).State = EntityState.Modified;
+                //    }
+                //    else
+                //    {
+                //        context.Entry(cp).State = EntityState.Added;
+                //    }
+                //}
+
+                //context.Entry(user.FirstName).State = EntityState.Modified;
+                //context.Entry(user.LastName).State = EntityState.Modified;
+
+
+                //Save change into the db
+                //context.SaveChanges();
+
+
+                ////Now check if an image exist for the contact (photo). If not, set the default image!
+                //var sourcePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", DEFAULT_PHOTO);
+                //var targetPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", $"{user.Id}.jpg");
+                //System.IO.File.Copy(sourcePath, targetPath);
+
+                //return the contact with its new ID if that was a new contact
             }
             else
             {

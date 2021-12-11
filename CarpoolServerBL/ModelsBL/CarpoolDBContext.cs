@@ -27,6 +27,33 @@ namespace CarpoolServerBL.Models
             }
         }
 
+        public User UpdateUser(User user, User updatedUser)
+        {
+            try
+            {
+                User currentUser = this.Users
+                .Where(u => u.Id == user.Id).FirstOrDefault();
+
+                currentUser.FirstName = updatedUser.FirstName;
+                currentUser.LastName = updatedUser.LastName;
+                currentUser.UserPswd = updatedUser.UserPswd;
+                currentUser.BirthDate = updatedUser.BirthDate;
+                currentUser.PhoneNum = updatedUser.PhoneNum;
+                currentUser.City = updatedUser.City;
+                currentUser.Neighborhood = updatedUser.Neighborhood;
+                currentUser.Street = updatedUser.Street;
+                currentUser.HouseNum = updatedUser.HouseNum;
+
+                this.SaveChanges();
+                return currentUser;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+        }
+
         public bool EmailExist(string email)
         {
             try
