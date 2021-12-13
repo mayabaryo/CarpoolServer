@@ -170,6 +170,12 @@ namespace CarpoolServer.Controllers
             if (adult != null)
             {
                 this.context.AddAdult(adult);
+
+                //Copy defualt image for this adult
+                var pathFrom = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", "defaultphoto.jpg");
+                var pathTo = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", $"{adult.Id}.jpg");
+                System.IO.File.Copy(pathFrom, pathTo);
+
                 //adult.IdNavigation.Photo = $"{adult.Id}.jpg";
                 //this.context.SaveChanges();
 
