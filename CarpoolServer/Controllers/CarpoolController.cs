@@ -74,46 +74,6 @@ namespace CarpoolServer.Controllers
                 Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
                 return updatedUser;
 
-                //currentUser.FirstName = user.FirstName;
-                //currentUser.LastName = user.LastName;
-                //currentUser.UserPswd = user.UserPswd;
-                //currentUser.BirthDate = user.BirthDate;
-                //currentUser.PhoneNum = user.PhoneNum;
-                //currentUser.City = user.City;
-                //currentUser.Neighborhood = user.Neighborhood;
-                //currentUser.Street = user.Street;
-                //currentUser.HouseNum = user.HouseNum;
-
-                ////update contact to the DB by marking all entities that should be modified or added
-                //if (user.Id > 0)
-                //{
-                //    context.Entry(user).State = EntityState.Modified;
-                //}
-                //else
-                //{
-                //    context.Entry(user).State = EntityState.Added;
-                //}
-
-                //foreach (ContactPhone cp in user.ContactPhones)
-                //{
-                //    if (cp.PhoneId > 0)
-                //    {
-                //        context.Entry(cp).State = EntityState.Modified;
-                //    }
-                //    else
-                //    {
-                //        context.Entry(cp).State = EntityState.Added;
-                //    }
-                //}
-
-                //context.Entry(user.FirstName).State = EntityState.Modified;
-                //context.Entry(user.LastName).State = EntityState.Modified;
-
-
-                //Save change into the db
-                //context.SaveChanges();
-
-
                 ////Now check if an image exist for the contact (photo). If not, set the default image!
                 //var sourcePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", DEFAULT_PHOTO);
                 //var targetPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", $"{user.Id}.jpg");
