@@ -129,7 +129,7 @@ namespace CarpoolServer.Controllers
             //Check user name and password
             if (adult != null)
             {
-                this.context.AddAdult(adult);
+                this.context.AdultSignUp(adult);
 
                 //Copy defualt image for this adult
                 var pathFrom = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", "defaultphoto.jpg");
@@ -153,19 +153,57 @@ namespace CarpoolServer.Controllers
 
         [Route("KidSignUp")]
         [HttpPost]
-        public Kid KidSignUp([FromBody] Kid kid)
+        public Kid KidSignUp([FromBody] KidsOfAdult kidsOfAdult)
         {
             //Check user name and password
-            if (kid != null)
+            if (kidsOfAdult != null)
             {
-                this.context.AddKid(kid);
-                //kid.IdNavigation.Photo = $"{adult.Id}.jpg";
-                //this.context.SaveChanges();
+                User a = HttpContext.Session.GetObject<User>("theUser");
 
-                HttpContext.Session.SetObject("theUser", kid);
+                Adult adult = kidsOfAdult.Adult;
+                Kid kid = kidsOfAdult.Kid;
+                this.context.AddKid(adult, kid);
+
+                //Copy defualt image for this adult
+                var pathFrom = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", "defaultphoto.jpg");
+                var pathTo = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", $"{kid.Id}.jpg");
+                System.IO.File.Copy(pathFrom, pathTo);
+
+                //HttpContext.Session.SetObject("theUser", kid);
                 Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
                 //Important! Due to the Lazy Loading, the user will be returned with all of its contects!!
                 return kid;
+            }
+            else
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return null;
+            }
+        }
+
+        [Route("AddAdult")]
+        [HttpPost]
+        public Adult AddAdult([FromBody] Adult adult)
+        {
+            //Check user name and password
+            if (adult != null)
+            {
+                User currentUser = HttpContext.Session.GetObject<User>("theUser");
+                Adult currentAdult = new Adult()
+                {
+                    IdNavigation = currentUser
+                };
+
+                this.context.AddAdult(currentAdult, adult);
+
+                //Copy defualt image for this adult
+                var pathFrom = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", "defaultphoto.jpg");
+                var pathTo = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", $"{adult.Id}.jpg");
+                System.IO.File.Copy(pathFrom, pathTo);
+
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                //Important! Due to the Lazy Loading, the user will be returned with all of its contects!!
+                return adult;
             }
             else
             {
@@ -205,50 +243,6 @@ namespace CarpoolServer.Controllers
                 }
             }
             return Forbid();
-        }
-
-        [Route("KidSignUp")]
-        [HttpGet]
-        public Kid KidSignUp([FromQuery] string email, [FromQuery] string userName, [FromQuery] string pass,
-            [FromQuery] string fName, [FromQuery] string lName, [FromQuery] DateTime birthDate,
-            [FromQuery] string phoneNumber, [FromQuery] string photo, [FromQuery] string city,
-            [FromQuery] string neighborhood, [FromQuery] string street, [FromQuery] int houseNum)
-        {
-            User user = new User()
-            {
-                Email = email,
-                UserName = userName,
-                UserPswd = pass,
-                FirstName = fName,
-                LastName = lName,
-                BirthDate = birthDate,
-                PhoneNum = phoneNumber,
-                Photo = photo,
-                City = city,
-                Neighborhood = neighborhood,
-                Street = street,
-                HouseNum = houseNum
-            };
-
-            Kid kid = new Kid()
-            {
-                IdNavigation = user
-            };
-
-            //Check user name and password
-            if (kid != null)
-            {
-                this.context.AddKid(kid);
-                HttpContext.Session.SetObject("theUser", user);
-                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-                //Important! Due to the Lazy Loading, the user will be returned with all of its contects!!
-                return kid;
-            }
-            else
-            {
-                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
-                return null;
-            }
         }
     }
 }

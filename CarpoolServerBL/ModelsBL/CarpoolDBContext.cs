@@ -95,7 +95,7 @@ namespace CarpoolServerBL.Models
             }
         }
 
-        public void AddAdult(Adult adult)
+        public void AdultSignUp(Adult adult)
         {
             try
             {
@@ -107,11 +107,76 @@ namespace CarpoolServerBL.Models
                 Console.WriteLine(e.Message);
             }
         }
-        public void AddKid(Kid kid)
+        public void AddKid(Adult adult, Kid kid)
         {
             try
             {
                 this.Kids.Add(kid);
+                this.SaveChanges();
+
+                //ילד שכבר קיים להורה
+                KidsOfAdult existKidOfAdult = this.KidsOfAdults.Where(a => a.AdultId == adult.Id).FirstOrDefault();
+                if(existKidOfAdult != null)
+                {
+                    int existKidId = existKidOfAdult.KidId;
+                    //אוסף כל ההורים השייכים לילד שקיים
+                    IQueryable<KidsOfAdult> kidsOfAdults = this.KidsOfAdults.Where(k => k.KidId == existKidId);
+
+                    if (kidsOfAdults != null)
+                    {
+                        //הוספת ההורים הקיימים לילד החדש
+                        foreach (KidsOfAdult kidsOf in kidsOfAdults)
+                        {
+                            KidsOfAdult newKidsOfAdult = new KidsOfAdult()
+                            {
+                                AdultId = kidsOf.AdultId,
+                                KidId = kid.Id
+                            };
+                            this.KidsOfAdults.Add(newKidsOfAdult);
+                        }
+                    }    
+                }
+                //אם לא קיימים עוד ילדים אז להוסיף את ההורה לילד החדש
+                else
+                {
+                    KidsOfAdult kidsOfAdult = new KidsOfAdult()
+                    {
+                        AdultId = adult.IdNavigation.Id,
+                        KidId = kid.Id
+                    };
+                    this.KidsOfAdults.Add(kidsOfAdult);
+                }
+                this.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+
+        public void AddAdult(Adult currentAdult, Adult adult)
+        {
+            try
+            {
+                this.Adults.Add(adult);
+                this.SaveChanges();
+
+                //אוסף כל הילדים השייכים להורה שקיים
+                IQueryable<KidsOfAdult> kidsOfAdults = this.KidsOfAdults.Where(a => a.AdultId == currentAdult.Id);
+
+                if (kidsOfAdults != null)
+                {
+                    //הוספת הילדים הקיימים להורה החדש
+                    foreach (KidsOfAdult kidsOf in kidsOfAdults)
+                    {
+                        KidsOfAdult newKidsOfAdult = new KidsOfAdult()
+                        {
+                            AdultId = adult.Id,
+                            KidId = kidsOf.KidId
+                        };
+                        this.KidsOfAdults.Add(newKidsOfAdult);
+                    }
+                }
                 this.SaveChanges();
             }
             catch (Exception e)
