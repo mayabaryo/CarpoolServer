@@ -115,7 +115,7 @@ namespace CarpoolServerBL.Models
                 this.SaveChanges();
 
                 //ילד שכבר קיים להורה
-                KidsOfAdult existKidOfAdult = this.KidsOfAdults.Where(a => a.AdultId == adult.Id).FirstOrDefault();
+                KidsOfAdult existKidOfAdult = this.KidsOfAdults.Where(a => a.AdultId == adult.IdNavigation.Id).FirstOrDefault();
                 if(existKidOfAdult != null)
                 {
                     int existKidId = existKidOfAdult.KidId;
@@ -162,7 +162,7 @@ namespace CarpoolServerBL.Models
                 this.SaveChanges();
 
                 //אוסף כל הילדים השייכים להורה שקיים
-                IQueryable<KidsOfAdult> kidsOfAdults = this.KidsOfAdults.Where(a => a.AdultId == currentAdult.Id);
+                IQueryable<KidsOfAdult> kidsOfAdults = this.KidsOfAdults.Where(a => a.AdultId == currentAdult.IdNavigation.Id);
 
                 if (kidsOfAdults != null)
                 {

@@ -1,5 +1,5 @@
-﻿INSERT INTO Users VALUES ('kuku@kuku.com','kuku','kaka','1234');
-GO
+﻿--INSERT INTO Users VALUES ('kuku@kuku.com','kuku','kaka','1234');
+--GO
 
 --scaffold-dbcontext "Server=localhost\sqlexpress;Database=CarpoolDB;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models –force
 
