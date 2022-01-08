@@ -151,25 +151,70 @@ namespace CarpoolServer.Controllers
             }
         }
 
-        [Route("KidSignUp")]
+        [Route("AddKid")]
         [HttpPost]
-        public Kid KidSignUp([FromBody] KidsOfAdult kidsOfAdult)
+        public Kid AddKid([FromBody] Kid kid)
         {
             //Check user name and password
-            if (kidsOfAdult != null)
+            if (kid != null)
             {
-                User a = HttpContext.Session.GetObject<User>("theUser");
+                User currentUser = HttpContext.Session.GetObject<User>("theUser");
+                Adult currentAdult = new Adult()
+                {
+                    IdNavigation = currentUser
+                };
 
-                Adult adult = kidsOfAdult.Adult;
-                Kid kid = kidsOfAdult.Kid;
-                this.context.AddKid(adult, kid);
+                //this.context.AddKid(currentAdult, kid);
 
-                //Copy defualt image for this adult
-                var pathFrom = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", "defaultphoto.jpg");
-                var pathTo = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", $"{kid.Id}.jpg");
-                System.IO.File.Copy(pathFrom, pathTo);
+                try
+                {
+                    context.Kids.Add(kid);
+                    context.SaveChanges();
 
-                //HttpContext.Session.SetObject("theUser", kid);
+                    //ילד שכבר קיים להורה
+                    KidsOfAdult existKidOfAdult = context.KidsOfAdults.Where(a => a.AdultId == currentAdult.IdNavigation.Id).FirstOrDefault();
+                    if (existKidOfAdult != null)
+                    {
+                        int existKidId = existKidOfAdult.KidId;
+                        //אוסף כל ההורים השייכים לילד שקיים
+                        IQueryable<KidsOfAdult> kidsOfAdults = context.KidsOfAdults.Where(k => k.KidId == existKidId);
+
+                        if (kidsOfAdults != null)
+                        {
+                            //הוספת ההורים הקיימים לילד החדש
+                            foreach (KidsOfAdult kidsOf in kidsOfAdults)
+                            {
+                                KidsOfAdult newKidsOfAdult = new KidsOfAdult()
+                                {
+                                    AdultId = kidsOf.AdultId,
+                                    KidId = kid.Id
+                                };
+                                context.KidsOfAdults.Add(newKidsOfAdult);
+                            }
+                        }
+                    }
+                    //אם לא קיימים עוד ילדים אז להוסיף את ההורה לילד החדש
+                    else
+                    {
+                        KidsOfAdult kidsOfAdult = new KidsOfAdult()
+                        {
+                            AdultId = currentAdult.IdNavigation.Id,
+                            KidId = kid.Id
+                        };
+                        context.KidsOfAdults.Add(kidsOfAdult);
+                    }
+                    context.SaveChanges();
+
+                    //Copy defualt image for this adult
+                    var pathFrom = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", "defaultphoto.jpg");
+                    var pathTo = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", $"{kid.Id}.jpg");
+                    System.IO.File.Copy(pathFrom, pathTo);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+
                 Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
                 //Important! Due to the Lazy Loading, the user will be returned with all of its contects!!
                 return kid;
