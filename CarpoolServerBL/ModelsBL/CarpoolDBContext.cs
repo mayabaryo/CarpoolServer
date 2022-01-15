@@ -184,5 +184,18 @@ namespace CarpoolServerBL.Models
                 Console.WriteLine(e.Message);
             }
         }
+
+        public void AddActivity(Activity activity)
+        {
+            try
+            {
+                this.Activities.Add(activity);
+                this.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
     }
 }

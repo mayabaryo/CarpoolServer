@@ -25,6 +25,7 @@ namespace CarpoolServer.Controllers
         //set the user default photo image name
         public const string DEFAULT_PHOTO = "defaultphoto.jpg";
 
+        #region Login
         [Route("Login")]
         [HttpGet]
         public User Login([FromQuery] string email, [FromQuery] string pass)
@@ -47,81 +48,9 @@ namespace CarpoolServer.Controllers
                 return null;
             }
         }
+        #endregion
 
-        [Route("UpdateUser")]
-        [HttpPost]
-        public User UpdateUser([FromBody] User user)
-        {
-            //If user is null the request is bad
-            if (user == null)
-            {
-                Response.StatusCode = (int)System.Net.HttpStatusCode.BadRequest;
-                return null;
-            }
-
-            User currentUser = HttpContext.Session.GetObject<User>("theUser");
-            //Check if user logged in and its ID is the same as the contact user ID
-            if (currentUser != null && currentUser.Id == user.Id)
-            {
-                User updatedUser = context.UpdateUser(currentUser, user);
-
-                if (updatedUser == null)
-                {
-                    Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
-                    return null;
-                }
-
-                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-                return updatedUser;
-
-                ////Now check if an image exist for the contact (photo). If not, set the default image!
-                //var sourcePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", DEFAULT_PHOTO);
-                //var targetPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", $"{user.Id}.jpg");
-                //System.IO.File.Copy(sourcePath, targetPath);
-
-                //return the contact with its new ID if that was a new contact
-            }
-            else
-            {
-                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
-                return null;
-            }
-        }
-
-        [Route("IsEmailExist")]
-        [HttpGet]
-        public bool IsEmailExist([FromQuery] string email)
-        {
-            bool isExist = this.context.EmailExist(email);
-            if (isExist)
-            {
-                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-                return true;
-            }
-            else
-            {
-                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
-                return false;
-            }
-        }
-
-        [Route("IsUserNameExist")]
-        [HttpGet]
-        public bool IsUserNameExist([FromQuery] string userName)
-        {
-            bool isExist = this.context.UserNameExist(userName);
-            if (isExist)
-            {
-                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-                return true;
-            }
-            else
-            {
-                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
-                return false;
-            }
-        }
-
+        #region AdultSignUp
         [Route("AdultSignUp")]
         [HttpPost]
         public Adult AdultSignUp([FromBody] Adult adult)
@@ -150,7 +79,9 @@ namespace CarpoolServer.Controllers
                 return null;
             }
         }
+        #endregion
 
+        #region AddKid
         [Route("AddKid")]
         [HttpPost]
         public Kid AddKid([FromBody] Kid kid)
@@ -225,7 +156,9 @@ namespace CarpoolServer.Controllers
                 return null;
             }
         }
+        #endregion
 
+        #region AddAdult
         [Route("AddAdult")]
         [HttpPost]
         public Adult AddAdult([FromBody] Adult adult)
@@ -256,7 +189,110 @@ namespace CarpoolServer.Controllers
                 return null;
             }
         }
+        #endregion
 
+        #region UpdateUser
+        [Route("UpdateUser")]
+        [HttpPost]
+        public User UpdateUser([FromBody] User user)
+        {
+            //If user is null the request is bad
+            if (user == null)
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.BadRequest;
+                return null;
+            }
+
+            User currentUser = HttpContext.Session.GetObject<User>("theUser");
+            //Check if user logged in and its ID is the same as the contact user ID
+            if (currentUser != null && currentUser.Id == user.Id)
+            {
+                User updatedUser = context.UpdateUser(currentUser, user);
+
+                if (updatedUser == null)
+                {
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                    return null;
+                }
+
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                return updatedUser;
+
+                ////Now check if an image exist for the contact (photo). If not, set the default image!
+                //var sourcePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", DEFAULT_PHOTO);
+                //var targetPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", $"{user.Id}.jpg");
+                //System.IO.File.Copy(sourcePath, targetPath);
+
+                //return the contact with its new ID if that was a new contact
+            }
+            else
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return null;
+            }
+        }
+        #endregion
+
+        #region AddActivity
+        [Route("AddActivity")]
+        [HttpPost]
+        public Activity AddActivity([FromBody] Activity activity)
+        {
+            //Check user name and password
+            if (activity != null)
+            {
+                this.context.AddActivity(activity);
+
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                return activity;
+            }
+            else
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return null;
+            }
+        }
+        #endregion
+
+        #region IsEmailExist
+        [Route("IsEmailExist")]
+        [HttpGet]
+        public bool IsEmailExist([FromQuery] string email)
+        {
+            bool isExist = this.context.EmailExist(email);
+            if (isExist)
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                return true;
+            }
+            else
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return false;
+            }
+        }
+        #endregion
+
+        #region IsUserNameExist
+        [Route("IsUserNameExist")]
+        [HttpGet]
+        public bool IsUserNameExist([FromQuery] string userName)
+        {
+            bool isExist = this.context.UserNameExist(userName);
+            if (isExist)
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                return true;
+            }
+            else
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return false;
+            }
+        }
+        #endregion
+
+        #region UploadImage
         [Route("UploadImage")]
         [HttpPost]
         public async Task<IActionResult> UploadImage(IFormFile file)
@@ -289,5 +325,6 @@ namespace CarpoolServer.Controllers
             }
             return Forbid();
         }
+        #endregion
     }
 }
