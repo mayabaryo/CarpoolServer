@@ -40,7 +40,6 @@ namespace CarpoolServerBL.Models
                 currentUser.BirthDate = updatedUser.BirthDate;
                 currentUser.PhoneNum = updatedUser.PhoneNum;
                 currentUser.City = updatedUser.City;
-                currentUser.Neighborhood = updatedUser.Neighborhood;
                 currentUser.Street = updatedUser.Street;
                 currentUser.HouseNum = updatedUser.HouseNum;
 
