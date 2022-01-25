@@ -10,6 +10,7 @@ namespace CarpoolServerBL.Models
 {
     public partial class CarpoolDBContext : DbContext
     {
+        #region Login
         public User Login(string email, string pswd)
         {
             try
@@ -26,7 +27,9 @@ namespace CarpoolServerBL.Models
                 return null;
             }
         }
+        #endregion
 
+        #region UpdateUser
         public User UpdateUser(User user, User updatedUser)
         {
             try
@@ -52,33 +55,9 @@ namespace CarpoolServerBL.Models
                 return null;
             }
         }
+        #endregion       
 
-        public bool EmailExist(string email)
-        {
-            try
-            {
-                return this.Users.Any(u => u.Email == email);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                return true;
-            }
-        }
-
-        public bool UserNameExist(string userName)
-        {
-            try
-            {
-                return this.Users.Any(u => u.UserName == userName);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                return true;
-            }        
-        }
-
+        #region AdultExist
         public Adult AdultExist(User user)
         {
             try
@@ -93,7 +72,9 @@ namespace CarpoolServerBL.Models
                 return null;
             }
         }
+        #endregion
 
+        #region AdultSignUp
         public void AdultSignUp(Adult adult)
         {
             try
@@ -106,6 +87,9 @@ namespace CarpoolServerBL.Models
                 Console.WriteLine(e.Message);
             }
         }
+        #endregion
+
+        #region AddKid
         public void AddKid(Adult adult, Kid kid)
         {
             try
@@ -152,7 +136,9 @@ namespace CarpoolServerBL.Models
                 Console.WriteLine(e.Message);
             }
         }
+        #endregion
 
+        #region AddAdult
         public void AddAdult(Adult currentAdult, Adult adult)
         {
             try
@@ -183,7 +169,9 @@ namespace CarpoolServerBL.Models
                 Console.WriteLine(e.Message);
             }
         }
+        #endregion
 
+        #region AddActivity
         public void AddActivity(Activity activity)
         {
             try
@@ -196,5 +184,127 @@ namespace CarpoolServerBL.Models
                 Console.WriteLine(e.Message);
             }
         }
+        #endregion
+
+        #region JoinToActivity
+        public void JoinToActivity(KidsInActivity kidsIn)
+        {
+            try
+            {
+                this.KidsInActivities.Add(kidsIn);
+                this.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+        #endregion
+
+        #region GetAllKids
+        public List<Kid> GetAllKids(Adult adult)
+        {
+            try
+            {
+                List<Kid> kids = new List<Kid>();
+                List<int> kidsId = new List<int>();
+                IQueryable<KidsOfAdult> kidsOfAdults = this.KidsOfAdults.Where(a => a.AdultId == adult.IdNavigation.Id);
+                if (kidsOfAdults != null)
+                {
+                    foreach (KidsOfAdult kidsOf in kidsOfAdults)
+                    {
+                        kidsId.Add(kidsOf.KidId);
+                    }
+                    foreach (int kidId in kidsId)
+                    {
+                        User user =this.Users.Where(k => k.Id == kidId).FirstOrDefault();
+                        Kid kid = this.Kids.Where(k => k.Id == kidId).FirstOrDefault();
+                        kids.Add(kid);
+                    }
+                }                
+                return kids;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+        }
+        #endregion
+
+        #region GetAllActivities
+        public List<Activity> GetAllActivities(Kid kid)
+        {
+            try
+            {
+                List<Activity> activities = new List<Activity>();
+                List<int> activitiesId = new List<int>();
+                IQueryable<KidsInActivity> kidsInActivities = this.KidsInActivities.Where(k => k.KidId == kid.IdNavigation.Id);
+                if (kidsInActivities != null)
+                {
+                    foreach (KidsInActivity kidsIn in kidsInActivities)
+                    {
+                        activitiesId.Add(kidsIn.ActivityId);
+                    }
+                    foreach (int activityId in activitiesId)
+                    {
+                        Activity activity = this.Activities.Where(a => a.Id == activityId).FirstOrDefault();
+                        activities.Add(activity);
+                    }
+                }
+                return activities;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+        }
+        #endregion
+
+        #region EmailExist
+        public bool EmailExist(string email)
+        {
+            try
+            {
+                return this.Users.Any(u => u.Email == email);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return true;
+            }
+        }
+        #endregion
+
+        #region UserNameExist
+        public bool UserNameExist(string userName)
+        {
+            try
+            {
+                return this.Users.Any(u => u.UserName == userName);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return true;
+            }
+        }
+        #endregion
+
+        #region ActivityExist
+        public bool ActivityExist(int activityId)
+        {
+            try
+            {
+                return this.Activities.Any(a => a.Id == activityId);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return true;
+            }
+        }
+        #endregion
     }
 }

@@ -238,13 +238,128 @@ namespace CarpoolServer.Controllers
         [HttpPost]
         public Activity AddActivity([FromBody] Activity activity)
         {
-            //Check user name and password
             if (activity != null)
             {
                 this.context.AddActivity(activity);
 
                 Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
                 return activity;
+            }
+            else
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return null;
+            }
+        }
+        #endregion
+
+        #region JoinToActivity
+        [Route("JoinToActivity")]
+        [HttpPost]
+        public KidsInActivity JoinToActivity([FromBody] KidsInActivity kidsIn)
+        {
+            if (kidsIn != null)
+            {
+                this.context.JoinToActivity(kidsIn);
+
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                return kidsIn;
+            }
+            else
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return null;
+            }
+        }
+        #endregion
+
+        #region GetAllKids
+        [Route("GetAllKids")]
+        [HttpGet]
+        public List<Kid> GetAllKids([FromQuery] Adult adult)
+        {
+            User currentUser = HttpContext.Session.GetObject<User>("theUser");
+            Adult currentAdult = new Adult()
+            {
+                IdNavigation = currentUser
+            };
+
+            //if (adult != null)
+            //{
+            //    try
+            //    {
+            //        List<Kid> kids = new List<Kid>();
+            //        List<int> kidsId = new List<int>();
+            //        IQueryable<KidsOfAdult> kidsOfAdults = context.KidsOfAdults.Where(a => a.AdultId == currentAdult.IdNavigation.Id);
+            //        if (kidsOfAdults != null)
+            //        {
+            //            foreach (KidsOfAdult kidsOf in kidsOfAdults)
+            //            {
+            //                kidsId.Add(kidsOf.KidId);
+            //            }
+            //            foreach (int kidId in kidsId)
+            //            {
+            //                Kid kid = context.Kids.Where(k => k.Id == kidId).FirstOrDefault();
+            //                kids.Add(kid);
+            //            }
+            //        }
+            //        return kids;
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        Console.WriteLine(e.Message);
+            //        return null;
+            //    }
+            //}
+            //return null;
+
+
+            List<Kid> kids = this.context.GetAllKids(currentAdult);
+
+            if (kids != null)
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                return kids;
+            }
+            else
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return null;
+            }
+        }
+        #endregion
+
+        //#region GetAllActivities
+        //[Route("GetAllActivities")]
+        //[HttpGet]
+        //public List<Activity> GetAllActivities([FromQuery] Kid kid)
+        //{
+        //    List<Activity> activities = this.context.GetAllActivities(kid);
+
+        //    if (activities != null)
+        //    {
+        //        Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+        //        return activities;
+        //    }
+        //    else
+        //    {
+        //        Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+        //        return null;
+        //    }
+        //}
+        //#endregion
+
+        #region GetAllActivities
+        [Route("GetAllActivities")]
+        [HttpPost]
+        public List<Activity> GetAllActivities([FromBody] Kid kid)
+        {
+            if (kid != null)
+            {
+                List<Activity> activities = this.context.GetAllActivities(kid);
+
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                return activities;
             }
             else
             {
@@ -279,6 +394,25 @@ namespace CarpoolServer.Controllers
         public bool IsUserNameExist([FromQuery] string userName)
         {
             bool isExist = this.context.UserNameExist(userName);
+            if (isExist)
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                return true;
+            }
+            else
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return false;
+            }
+        }
+        #endregion
+
+        #region IsActivityExist
+        [Route("IsActivityExist")]
+        [HttpGet]
+        public bool IsActivityExist([FromQuery] int activityId)
+        {
+            bool isExist = this.context.ActivityExist(activityId);
             if (isExist)
             {
                 Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
