@@ -16,8 +16,8 @@ namespace CarpoolServerBL.Models
             try
             {
                 User user = this.Users
-                //.Include(us => us.UserContacts)
-                //.ThenInclude(uc => uc.ContactPhones)
+                .Include(us => us.Adult)
+                .Include(us => us.Kid)
                 .Where(u => (u.Email == email || u.UserName == email) && u.UserPswd == pswd).FirstOrDefault();
                 return user;
             }
