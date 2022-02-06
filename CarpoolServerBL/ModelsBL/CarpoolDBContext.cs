@@ -201,6 +201,21 @@ namespace CarpoolServerBL.Models
         }
         #endregion
 
+        #region AddCarpool
+        public void AddCarpool(Carpool carpool)
+        {
+            try
+            {
+                this.Carpools.Add(carpool);
+                this.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+        #endregion
+
         #region GetAllKids
         public List<Kid> GetAllKids(Adult adult)
         {

@@ -273,6 +273,26 @@ namespace CarpoolServer.Controllers
         }
         #endregion
 
+        #region AddCarpool
+        [Route("AddCarpool")]
+        [HttpPost]
+        public Carpool AddCarpool([FromBody] Carpool carpool)
+        {
+            if (carpool != null)
+            {
+                this.context.AddCarpool(carpool);
+
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                return carpool;
+            }
+            else
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return null;
+            }
+        }
+        #endregion
+
         #region GetAllKids
         [Route("GetAllKids")]
         [HttpGet]
