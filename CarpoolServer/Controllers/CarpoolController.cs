@@ -293,6 +293,26 @@ namespace CarpoolServer.Controllers
         }
         #endregion
 
+        #region JoinToCarpool
+        [Route("JoinToCarpool")]
+        [HttpPost]
+        public KidsInCarpool JoinToCarpool([FromBody] KidsInCarpool kidsIn)
+        {
+            if (kidsIn != null)
+            {
+                this.context.JoinToCarpool(kidsIn);
+
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                return kidsIn;
+            }
+            else
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return null;
+            }
+        }
+        #endregion
+
         #region GetAllKids
         [Route("GetAllKids")]
         [HttpGet]

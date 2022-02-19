@@ -16,8 +16,8 @@ namespace CarpoolServerBL.Models
             try
             {
                 User user = this.Users
-                .Include(us => us.Adult)
-                .Include(us => us.Kid)
+                .Include(us => us.Adult).Include(us => us.Adult.Activities).Include(us => us.Adult.Carpools).Include(us => us.Adult.KidsOfAdults)
+                .Include(us => us.Kid).Include(us => us.Kid.KidsInActivities).Include(us => us.Kid.KidsInCarpools).Include(us => us.Kid.KidsOfAdults)
                 .Where(u => (u.Email == email || u.UserName == email) && u.UserPswd == pswd).FirstOrDefault();
                 return user;
             }
@@ -216,6 +216,21 @@ namespace CarpoolServerBL.Models
         }
         #endregion
 
+        #region JoinToCarpool
+        public void JoinToCarpool(KidsInCarpool kidsIn)
+        {
+            try
+            {
+                this.KidsInCarpools.Add(kidsIn);
+                this.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+        #endregion
+
         #region GetAllKids
         public List<Kid> GetAllKids(Adult adult)
         {
@@ -232,8 +247,12 @@ namespace CarpoolServerBL.Models
                     }
                     foreach (int kidId in kidsId)
                     {
-                        User user =this.Users.Where(k => k.Id == kidId).FirstOrDefault();
-                        Kid kid = this.Kids.Where(k => k.Id == kidId).FirstOrDefault();
+                        User user = this.Users.Where(k => k.Id == kidId).FirstOrDefault();
+                        Kid kid = this.Kids
+                            .Include(k => k.KidsInActivities)
+                            .Include(k => k.KidsInCarpools)
+                            .Include(k => k.KidsOfAdults)
+                            .Where(k => k.Id == kidId).FirstOrDefault();
                         kids.Add(kid);
                     }
                 }                
@@ -263,7 +282,11 @@ namespace CarpoolServerBL.Models
                     }
                     foreach (int activityId in activitiesId)
                     {
-                        Activity activity = this.Activities.Where(a => a.Id == activityId).FirstOrDefault();
+                        Activity activity = this.Activities
+                            .Include(a => a.Adult)
+                            .Include(a => a.Carpools)
+                            .Include(a => a.KidsInActivities)
+                            .Where(a => a.Id == activityId).FirstOrDefault();
                         activities.Add(activity);
                     }
                 }
