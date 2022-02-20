@@ -409,6 +409,26 @@ namespace CarpoolServer.Controllers
         }
         #endregion
 
+        #region GetAllCarpools
+        [Route("GetAllCarpools")]
+        [HttpPost]
+        public List<Carpool> GetAllCarpools([FromBody] Kid kid)
+        {
+            if (kid != null)
+            {
+                List<Carpool> carpools = this.context.GetAllCarpools(kid);
+
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                return carpools;
+            }
+            else
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return null;
+            }
+        }
+        #endregion
+
         #region IsEmailExist
         [Route("IsEmailExist")]
         [HttpGet]
