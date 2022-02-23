@@ -60,10 +60,17 @@ namespace CarpoolServer.Controllers
             {
                 this.context.AdultSignUp(adult);
 
-                //Copy defualt image for this adult
-                var pathFrom = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", "defaultphoto.jpg");
-                var pathTo = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", $"{adult.Id}.jpg");
-                System.IO.File.Copy(pathFrom, pathTo);
+                try
+                {
+                    //Copy defualt image for this adult
+                    var pathFrom = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", "defaultphoto.jpg");
+                    var pathTo = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", $"{adult.Id}.jpg");
+                    System.IO.File.Copy(pathFrom, pathTo);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
 
                 //adult.IdNavigation.Photo = $"{adult.Id}.jpg";
                 //this.context.SaveChanges();
@@ -417,6 +424,26 @@ namespace CarpoolServer.Controllers
             if (kid != null)
             {
                 List<Carpool> carpools = this.context.GetAllCarpools(kid);
+
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                return carpools;
+            }
+            else
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return null;
+            }
+        }
+        #endregion
+
+        #region GetCarpoolsInActivity
+        [Route("GetCarpoolsInActivity")]
+        [HttpPost]
+        public List<Carpool> GetCarpoolsInActivity([FromBody] Activity activity)
+        {
+            if (activity != null)
+            {
+                List<Carpool> carpools = this.context.GetCarpoolsInActivity(activity);
 
                 Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
                 return carpools;

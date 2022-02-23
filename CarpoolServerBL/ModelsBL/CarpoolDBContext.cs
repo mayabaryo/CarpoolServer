@@ -284,6 +284,7 @@ namespace CarpoolServerBL.Models
                     {
                         Activity activity = this.Activities
                             .Include(a => a.Adult)
+                            .Include(a => a.Adult.IdNavigation)
                             .Include(a => a.Carpools)
                             .Include(a => a.KidsInActivities)
                             .Where(a => a.Id == activityId).FirstOrDefault();
@@ -318,6 +319,7 @@ namespace CarpoolServerBL.Models
                     {
                         Carpool carpool = this.Carpools
                             .Include(a => a.Adult)
+                            .Include(a => a.Adult.IdNavigation)
                             .Include(a => a.Activity)
                             .Include(a => a.KidsInCarpools)
                             .Include(a => a.CarpoolStatus)
@@ -327,6 +329,38 @@ namespace CarpoolServerBL.Models
                     }
                 }
                 return carpools;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+        }
+        #endregion
+
+        #region GetCarpoolsInActivity
+        public List<Carpool> GetCarpoolsInActivity(Activity activity)
+        {
+            try
+            {
+                List<Carpool> carpoolList = new List<Carpool>();
+
+                IQueryable<Carpool> carpools = this.Carpools
+                    .Include(a => a.Adult)
+                    .Include(a => a.Adult.IdNavigation)
+                    .Include(a => a.Activity)
+                    .Include(a => a.KidsInCarpools)
+                    .Include(a => a.CarpoolStatus)
+                    .Where(a => a.ActivityId == activity.Id);
+               
+                if (carpools != null)
+                {
+                    foreach (Carpool c in carpools)
+                    {
+                        carpoolList.Add(c);
+                    }                   
+                }
+                return carpoolList;
             }
             catch (Exception e)
             {
