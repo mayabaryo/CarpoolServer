@@ -396,14 +396,14 @@ namespace CarpoolServer.Controllers
         //}
         //#endregion
 
-        #region GetAllActivities
-        [Route("GetAllActivities")]
+        #region GetKidActivities
+        [Route("GetKidActivities")]
         [HttpPost]
         public List<Activity> GetAllActivities([FromBody] Kid kid)
         {
             if (kid != null)
             {
-                List<Activity> activities = this.context.GetAllActivities(kid);
+                List<Activity> activities = this.context.GetKidActivities(kid);
 
                 Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
                 return activities;
@@ -416,14 +416,34 @@ namespace CarpoolServer.Controllers
         }
         #endregion
 
-        #region GetAllCarpools
-        [Route("GetAllCarpools")]
+        #region GetKidCarpools
+        [Route("GetKidCarpools")]
         [HttpPost]
-        public List<Carpool> GetAllCarpools([FromBody] Kid kid)
+        public List<Carpool> GetKidCarpools([FromBody] Kid kid)
         {
             if (kid != null)
             {
-                List<Carpool> carpools = this.context.GetAllCarpools(kid);
+                List<Carpool> carpools = this.context.GetKidCarpools(kid);
+
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                return carpools;
+            }
+            else
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return null;
+            }
+        }
+        #endregion
+
+        #region GetAdultCarpools
+        [Route("GetAdultCarpools")]
+        [HttpPost]
+        public List<Carpool> GetAdultCarpools([FromBody] Adult adult)
+        {
+            if (adult != null)
+            {
+                List<Carpool> carpools = this.context.GetAdultCarpools(adult);
 
                 Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
                 return carpools;

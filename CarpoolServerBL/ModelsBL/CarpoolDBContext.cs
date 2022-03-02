@@ -266,8 +266,8 @@ namespace CarpoolServerBL.Models
         }
         #endregion
 
-        #region GetAllActivities
-        public List<Activity> GetAllActivities(Kid kid)
+        #region GetKidActivities
+        public List<Activity> GetKidActivities(Kid kid)
         {
             try
             {
@@ -301,8 +301,8 @@ namespace CarpoolServerBL.Models
         }
         #endregion
 
-        #region GetAllCarpools
-        public List<Carpool> GetAllCarpools(Kid kid)
+        #region GetKidCarpools
+        public List<Carpool> GetKidCarpools(Kid kid)
         {
             try
             {
@@ -329,6 +329,36 @@ namespace CarpoolServerBL.Models
                     }
                 }
                 return carpools;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+        }
+        #endregion
+
+        #region GetAdultCarpools
+        public List<Carpool> GetAdultCarpools(Adult adult)
+        {
+            try
+            {
+                IQueryable<Carpool> carpools = this.Carpools
+                    .Include(a => a.Adult)
+                    .Include(a => a.Adult.IdNavigation)
+                    .Include(a => a.Activity)
+                    .Include(a => a.KidsInCarpools)
+                    .Include(a => a.CarpoolStatus)
+                    .Where(a => a.AdultId == adult.IdNavigation.Id);
+
+                List<Carpool> carpoolList = new List<Carpool>();
+
+                foreach (Carpool c in carpools)
+                {                   
+                    carpoolList.Add(c);
+                }
+                
+                return carpoolList;
             }
             catch (Exception e)
             {
