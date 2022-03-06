@@ -138,3 +138,7 @@ Go
 ALter Table KidsInCarpools
 Add Constraint PK_KidsInCarpools Primary Key (KidID, CarpoolID)
 Go
+
+ALTER TABLE Carpools
+ADD CONSTRAINT UC_AdultID_ActivityID UNIQUE (AdultID,ActivityID);
+Go
