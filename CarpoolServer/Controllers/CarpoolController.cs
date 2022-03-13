@@ -29,8 +29,8 @@ namespace CarpoolServer.Controllers
         //set the user default photo image name
         public const string DEFAULT_PHOTO = "defaultphoto.jpg";
 
-
-        static void SendEmail(string subject, string body, string to, string toName, string from, string fromName, string pswd, string smtpUrl)
+        #region SendEmail
+        private static void SendEmail(string subject, string body, string to, string toName, string from, string fromName, string pswd, string smtpUrl)
         {
             var fromAddress = new MailAddress(from, fromName);
             var toAddress = new MailAddress(to, toName);
@@ -55,7 +55,9 @@ namespace CarpoolServer.Controllers
             }
         }
 
-        static void SendEmailHelper(string body, string to, string toName)
+        [Route("SendEmailHelper")]
+        [HttpGet]
+        public void SendEmailHelper([FromQuery] string body, [FromQuery] string to, [FromQuery] string toName)
         {
             string subject = "סיסמת פעילות";
             string from = Startup.ServerEmail;
@@ -63,8 +65,7 @@ namespace CarpoolServer.Controllers
             string pswrd = Startup.ServerEmailPassword;
             SendEmail(subject, body, to, toName, from, fromName, pswrd, "smtp.gmail.com");
         }
-
-
+        #endregion
 
         #region Login
         [Route("Login")]
