@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Threading.Tasks;
 
 namespace CarpoolServer.Controllers
@@ -16,14 +18,53 @@ namespace CarpoolServer.Controllers
     {
         #region Add connection to the db context using dependency injection
         CarpoolDBContext context;
+        //string serverEmail;
         public CarpoolController(CarpoolDBContext context)
         {
             this.context = context;
+            //this.serverEmail = Startup.ServerEmail;
         }
         #endregion
 
         //set the user default photo image name
         public const string DEFAULT_PHOTO = "defaultphoto.jpg";
+
+
+        static void SendEmail(string subject, string body, string to, string toName, string from, string fromName, string pswd, string smtpUrl)
+        {
+            var fromAddress = new MailAddress(from, fromName);
+            var toAddress = new MailAddress(to, toName);
+            string fromPassword = pswd;
+
+            var smtp = new SmtpClient
+            {
+                Host = smtpUrl,
+                Port = 587,
+                EnableSsl = true,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                Credentials = new NetworkCredential(fromAddress.Address, fromPassword),
+                Timeout = 20000
+            };
+            using (var message = new MailMessage(fromAddress, toAddress)
+            {
+                Subject = subject,
+                Body = body
+            })
+            {
+                smtp.Send(message);
+            }
+        }
+
+        static void SendEmailHelper(string body, string to, string toName)
+        {
+            string subject = "סיסמת פעילות";
+            string from = Startup.ServerEmail;
+            string fromName = "Carpool App";
+            string pswrd = Startup.ServerEmailPassword;
+            SendEmail(subject, body, to, toName, from, fromName, pswrd, "smtp.gmail.com");
+        }
+
+
 
         #region Login
         [Route("Login")]

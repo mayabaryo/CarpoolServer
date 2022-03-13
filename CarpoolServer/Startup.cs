@@ -18,6 +18,9 @@ namespace CarpoolServer
 {
     public class Startup
     {
+        public static string ServerEmail {get; private set;}
+        public static string ServerEmailPassword { get; private set; }
+
         #region Add Constructor with Configuration using Dependency Injection
         //This constructor need to be added to get an instance of configuration file (appsettings.json)
         public Startup(IConfiguration configuration)
@@ -53,6 +56,13 @@ namespace CarpoolServer
             services.AddDbContext<CarpoolDBContext>(options => options
                                                                 .UseSqlServer(connectionString));
             //.UseLazyLoadingProxies());
+            #endregion
+            #region Read Email and email password
+            Object email = this.Configuration.GetValue(typeof(string), "ServerEmail");
+            Object emailPassword = this.Configuration.GetValue(typeof(string), "ServerEmailPassword");
+
+            ServerEmail = email.ToString();
+            ServerEmailPassword = emailPassword.ToString();
             #endregion
         }
 
