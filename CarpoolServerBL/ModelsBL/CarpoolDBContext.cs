@@ -400,6 +400,41 @@ namespace CarpoolServerBL.Models
         }
         #endregion
 
+        #region GetKidsInCarpool
+        public List<Kid> GetKidsInCarpool(Carpool carpool)
+        {
+            try
+            {
+                List<Kid> kids = new List<Kid>();
+                List<int> kidsId = new List<int>();
+                IQueryable<KidsInCarpool> kidsInCarpool = this.KidsInCarpools.Where(a => a.CarpoolId == carpool.Id);
+                if (kidsInCarpool != null)
+                {
+                    foreach (KidsInCarpool kidsIn in kidsInCarpool)
+                    {
+                        kidsId.Add(kidsIn.KidId);
+                    }
+                    foreach (int kidId in kidsId)
+                    {
+                        Kid kid = this.Kids
+                            .Include(k => k.IdNavigation)
+                            .Include(k => k.KidsInActivities)
+                            .Include(k => k.KidsInCarpools)
+                            .Include(k => k.KidsOfAdults)
+                            .Where(k => k.Id == kidId).FirstOrDefault();
+                        kids.Add(kid);
+                    }
+                }
+                return kids;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+        }
+        #endregion
+
         #region EmailExist
         public bool EmailExist(string email)
         {
