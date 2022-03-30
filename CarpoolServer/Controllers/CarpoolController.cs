@@ -538,6 +538,34 @@ namespace CarpoolServer.Controllers
         }
         #endregion
 
+        #region AddRequestToJoinCarpool
+        [Route("AddRequestToJoinCarpool")]
+        [HttpPost]
+        public bool AddRequestToJoinCarpool([FromBody] RequestToJoinCarpool request)
+        {
+            //Check user name and password
+            if (request != null)
+            {
+                bool addRequest = this.context.AddRequestToJoinCarpool(request);
+
+                if (addRequest)
+                {
+                    //HttpContext.Session.SetObject("theUser", request);
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                    //Important! Due to the Lazy Loading, the user will be returned with all of its contects!!
+                    return true;
+                }
+                else
+                    return false;
+            }
+            else
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return false;
+            }
+        }
+        #endregion
+
         #region IsEmailExist
         [Route("IsEmailExist")]
         [HttpGet]

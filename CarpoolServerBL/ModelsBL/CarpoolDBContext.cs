@@ -435,6 +435,25 @@ namespace CarpoolServerBL.Models
         }
         #endregion
 
+        #region AddRequestToJoinCarpool
+        public bool AddRequestToJoinCarpool(RequestToJoinCarpool request)
+        {
+            try
+            {
+                request.RequestStatus = this.RequestCarpoolStatuses.Where(r => r.RequestId == 3).FirstOrDefault();
+                this.RequestToJoinCarpools.Add(request);
+
+                this.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+        }
+        #endregion
+
         #region EmailExist
         public bool EmailExist(string email)
         {

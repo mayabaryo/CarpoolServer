@@ -126,6 +126,7 @@ INSERT INTO RequestCarpoolStatus VALUES ('New')
 Go
 
 -------
+--ALTER
 
 ALter Table KidsOfAdults
 Add Constraint PK_KidsOfAdults Primary Key (AdultID, KidID)
@@ -141,4 +142,8 @@ Go
 
 ALTER TABLE Carpools
 ADD CONSTRAINT UC_AdultID_ActivityID UNIQUE (AdultID,ActivityID);
+Go
+
+ALTER TABLE RequestToJoinCarpool
+Add Constraint PK_RequestToJoinCarpool Primary Key (KidID, CarpoolID)
 Go

@@ -40,7 +40,7 @@ namespace CarpoolServerBL.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
+            modelBuilder.HasAnnotation("Relational:Collation", "Hebrew_CI_AS");
 
             modelBuilder.Entity<Activity>(entity =>
             {
@@ -90,6 +90,9 @@ namespace CarpoolServerBL.Models
 
             modelBuilder.Entity<Carpool>(entity =>
             {
+                entity.HasIndex(e => new { e.AdultId, e.ActivityId }, "UC_AdultID_ActivityID")
+                    .IsUnique();
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.ActivityId).HasColumnName("ActivityID");
@@ -122,7 +125,7 @@ namespace CarpoolServerBL.Models
             modelBuilder.Entity<CarpoolStatus>(entity =>
             {
                 entity.HasKey(e => e.StatusId)
-                    .HasName("PK__CarpoolS__C8EE204386F21EC1");
+                    .HasName("PK__CarpoolS__C8EE2043AE2544BF");
 
                 entity.ToTable("CarpoolStatus");
 
@@ -212,7 +215,7 @@ namespace CarpoolServerBL.Models
             modelBuilder.Entity<RequestCarpoolStatus>(entity =>
             {
                 entity.HasKey(e => e.RequestId)
-                    .HasName("PK__RequestC__33A8519A56381E9C");
+                    .HasName("PK__RequestC__33A8519AF135BBEA");
 
                 entity.ToTable("RequestCarpoolStatus");
 
@@ -225,30 +228,30 @@ namespace CarpoolServerBL.Models
 
             modelBuilder.Entity<RequestToJoinCarpool>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => new { e.KidId, e.CarpoolId });
 
                 entity.ToTable("RequestToJoinCarpool");
 
-                entity.Property(e => e.CarpoolId).HasColumnName("CarpoolID");
-
                 entity.Property(e => e.KidId).HasColumnName("KidID");
+
+                entity.Property(e => e.CarpoolId).HasColumnName("CarpoolID");
 
                 entity.Property(e => e.RequestStatusId).HasColumnName("RequestStatusID");
 
                 entity.HasOne(d => d.Carpool)
-                    .WithMany()
+                    .WithMany(p => p.RequestToJoinCarpools)
                     .HasForeignKey(d => d.CarpoolId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__RequestTo__Carpo__4222D4EF");
 
                 entity.HasOne(d => d.Kid)
-                    .WithMany()
+                    .WithMany(p => p.RequestToJoinCarpools)
                     .HasForeignKey(d => d.KidId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__RequestTo__KidID__412EB0B6");
 
                 entity.HasOne(d => d.RequestStatus)
-                    .WithMany()
+                    .WithMany(p => p.RequestToJoinCarpools)
                     .HasForeignKey(d => d.RequestStatusId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__RequestTo__Reque__4316F928");
