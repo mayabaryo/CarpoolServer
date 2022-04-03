@@ -566,6 +566,16 @@ namespace CarpoolServer.Controllers
         }
         #endregion
 
+        #region GetRequestsToJoinCarpool
+        [Route("GetRequestsToJoinCarpool")]
+        [HttpGet]
+        public List<RequestToJoinCarpool> GetRequestsToJoinCarpool([FromQuery] int adultId)
+        {
+            List<RequestToJoinCarpool> requests = this.context.GetRequestsToJoinCarpool(adultId);
+            return requests;
+        }
+        #endregion
+
         #region IsEmailExist
         [Route("IsEmailExist")]
         [HttpGet]

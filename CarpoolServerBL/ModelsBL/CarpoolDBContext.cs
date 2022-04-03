@@ -454,6 +454,27 @@ namespace CarpoolServerBL.Models
         }
         #endregion
 
+        #region GetRequestsToJoinCarpool
+        public List<RequestToJoinCarpool> GetRequestsToJoinCarpool(int adultId)
+        {
+            try
+            {
+                List<RequestToJoinCarpool> list = this.RequestToJoinCarpools
+                    .Include(c => c.Carpool)
+                    .Include(k => k.Kid)
+                    .Include(k => k.Kid.IdNavigation)
+                    .Include(r => r.RequestStatus)
+                    .Where(c => c.Carpool.AdultId == adultId && c.RequestStatusId == 3).ToList();
+                return list;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+        }
+        #endregion
+
         #region EmailExist
         public bool EmailExist(string email)
         {
