@@ -475,6 +475,49 @@ namespace CarpoolServerBL.Models
         }
         #endregion
 
+        #region ApproveRequestToJoinCarpool
+        public void ApproveRequestToJoinCarpool(RequestToJoinCarpool request)
+        {
+            try
+            {
+                KidsInCarpool kidsIn = new KidsInCarpool()
+                {
+                    //Kid = request.Kid,
+                    KidId = request.KidId,
+                    //Carpool = request.Carpool,
+                    CarpoolId = request.CarpoolId
+                };
+
+                this.Entry(kidsIn).State = EntityState.Added;
+                request.RequestStatusId = (int)CARPOOL_REQUEST_STATUS.APPROVED;
+                this.Entry(request).State = EntityState.Modified;
+
+                this.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+        #endregion
+
+        #region DeleteRequestToJoinCarpool
+        public void DeleteRequestToJoinCarpool(RequestToJoinCarpool request)
+        {
+            try
+            {
+                request.RequestStatusId = (int)CARPOOL_REQUEST_STATUS.DECLINED;
+                this.Entry(request).State = EntityState.Modified;
+
+                this.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+        #endregion
+
         #region EmailExist
         public bool EmailExist(string email)
         {

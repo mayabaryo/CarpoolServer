@@ -576,6 +576,44 @@ namespace CarpoolServer.Controllers
         }
         #endregion
 
+        #region ApproveRequestToJoinCarpool
+        [Route("ApproveRequestToJoinCarpool")]
+        [HttpPost]
+        public bool ApproveRequestToJoinCarpool([FromBody] RequestToJoinCarpool request)
+        {
+            if (request != null)
+            {
+                this.context.ApproveRequestToJoinCarpool(request);
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                return true;
+            }
+            else
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return false;
+            }            
+        }
+        #endregion
+
+        #region DeleteRequestToJoinCarpool
+        [Route("DeleteRequestToJoinCarpool")]
+        [HttpPost]
+        public bool DeleteRequestToJoinCarpool([FromBody] RequestToJoinCarpool request)
+        {
+            if (request != null)
+            {
+                this.context.DeleteRequestToJoinCarpool(request);
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                return true;
+            }
+            else
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return false;
+            }
+        }
+        #endregion
+
         #region IsEmailExist
         [Route("IsEmailExist")]
         [HttpGet]

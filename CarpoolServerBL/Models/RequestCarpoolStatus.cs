@@ -17,4 +17,11 @@ namespace CarpoolServerBL.Models
 
         public virtual ICollection<RequestToJoinCarpool> RequestToJoinCarpools { get; set; }
     }
+
+    public enum CARPOOL_REQUEST_STATUS
+    {
+        APPROVED = 1,
+        DECLINED = 2,
+        NEW = 3
+    }
 }
