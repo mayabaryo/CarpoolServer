@@ -541,49 +541,75 @@ namespace CarpoolServer.Controllers
         #region AddRequestToJoinCarpool
         [Route("AddRequestToJoinCarpool")]
         [HttpPost]
-        public bool AddRequestToJoinCarpool([FromBody] RequestToJoinCarpool request)
+        public bool AddRequestToJoinCarpool([FromQuery] int kidId, [FromQuery] int carpoolId)
         {
-            //Check user name and password
-            if (request != null)
-            {
-                bool addRequest = this.context.AddRequestToJoinCarpool(request);
 
-                if (addRequest)
-                {
-                    //HttpContext.Session.SetObject("theUser", request);
-                    Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-                    //Important! Due to the Lazy Loading, the user will be returned with all of its contects!!
-                    return true;
-                }
-                else
-                    return false;
+            bool addRequest = this.context.AddRequestToJoinCarpool(kidId, carpoolId);
+            if (addRequest)
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                return true;
             }
             else
             {
                 Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
                 return false;
             }
+
+            ////Check user name and password
+            //if (request != null)
+            //{
+            //    bool addRequest = this.context.AddRequestToJoinCarpool(request);
+
+            //    if (addRequest)
+            //    {
+            //        //HttpContext.Session.SetObject("theUser", request);
+            //        Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+            //        //Important! Due to the Lazy Loading, the user will be returned with all of its contects!!
+            //        return true;
+            //    }
+            //    else
+            //        return false;
+            //}
+            //else
+            //{
+            //    Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+            //    return false;
+            //}
         }
         #endregion
 
         #region GetRequestsToJoinCarpool
         [Route("GetRequestsToJoinCarpool")]
         [HttpGet]
-        public List<RequestToJoinCarpool> GetRequestsToJoinCarpool([FromQuery] int adultId)
+        public List<KidsInCarpool> GetRequestsToJoinCarpool([FromQuery] int adultId)
         {
-            List<RequestToJoinCarpool> requests = this.context.GetRequestsToJoinCarpool(adultId);
-            return requests;
+            List<KidsInCarpool> requests = this.context.GetRequestsToJoinCarpool(adultId);
+            if (requests != null)
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                return requests;
+            }
+            else
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return null;
+            }
+
+
+            //List<RequestToJoinCarpool> requests = this.context.GetRequestsToJoinCarpool(adultId);
+            //return requests;
         }
         #endregion
 
         #region ApproveRequestToJoinCarpool
         [Route("ApproveRequestToJoinCarpool")]
         [HttpPost]
-        public bool ApproveRequestToJoinCarpool([FromBody] RequestToJoinCarpool request)
+        public bool ApproveRequestToJoinCarpool([FromQuery] int kidId, [FromQuery] int carpoolId)
         {
-            if (request != null)
+            bool approved = this.context.ApproveRequestToJoinCarpool(kidId, carpoolId);
+            if (approved)
             {
-                this.context.ApproveRequestToJoinCarpool(request);
                 Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
                 return true;
             }
@@ -591,18 +617,30 @@ namespace CarpoolServer.Controllers
             {
                 Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
                 return false;
-            }            
+            }
+
+            //if (request != null)
+            //{
+            //    this.context.ApproveRequestToJoinCarpool(request);
+            //    Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+            //    return true;
+            //}
+            //else
+            //{
+            //    Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+            //    return false;
+            //}            
         }
         #endregion
 
-        #region DeleteRequestToJoinCarpool
-        [Route("DeleteRequestToJoinCarpool")]
+        #region DeclineRequestToJoinCarpool
+        [Route("DeclineRequestToJoinCarpool")]
         [HttpPost]
-        public bool DeleteRequestToJoinCarpool([FromBody] RequestToJoinCarpool request)
+        public bool DeclineRequestToJoinCarpool([FromQuery] int kidId, [FromQuery] int carpoolId)
         {
-            if (request != null)
+            bool declined = this.context.DeclineRequestToJoinCarpool(kidId, carpoolId);
+            if (declined)
             {
-                this.context.DeleteRequestToJoinCarpool(request);
                 Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
                 return true;
             }
@@ -611,6 +649,19 @@ namespace CarpoolServer.Controllers
                 Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
                 return false;
             }
+
+
+            //if (request != null)
+            //{
+            //    this.context.DeleteRequestToJoinCarpool(request);
+            //    Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+            //    return true;
+            //}
+            //else
+            //{
+            //    Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+            //    return false;
+            //}
         }
         #endregion
 

@@ -147,3 +147,17 @@ Go
 ALTER TABLE RequestToJoinCarpool
 Add Constraint PK_RequestToJoinCarpool Primary Key (KidID, CarpoolID)
 Go
+
+/****** Object:  Table [dbo].[RequestToJoinCarpool]    Script Date: 06/04/2022 11:23:45 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RequestToJoinCarpool]') AND type in (N'U'))
+DROP TABLE [dbo].[RequestToJoinCarpool]
+GO
+
+ALTER Table kidsIncarpools
+Add StatusID  int default(3) NOT NULL
+GO
+
+ALTER Table kidsIncarpools
+ADD FOREIGN KEY (StatusID) REFERENCES RequestCarpoolStatus(RequestID)
+Go
+

@@ -8,6 +8,12 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace CarpoolServerBL.Models
 {
+    public enum CARPOOL_REQUEST_STATUS
+    {
+        APPROVED = 1,
+        DECLINED = 2,
+        NEW = 3
+    }
     public partial class CarpoolDBContext : DbContext
     {
         #region Login
@@ -436,14 +442,32 @@ namespace CarpoolServerBL.Models
         #endregion
 
         #region AddRequestToJoinCarpool
-        public bool AddRequestToJoinCarpool(RequestToJoinCarpool request)
+        public bool AddRequestToJoinCarpool(int kidId, int carpoolId)
         {
             try
             {
-                request.RequestStatus = this.RequestCarpoolStatuses.Where(r => r.RequestId == 3).FirstOrDefault();
-                this.RequestToJoinCarpools.Add(request);
+                //Check if the record exist in the DB
+                KidsInCarpool record = KidsInCarpools.Where(o => o.KidId == kidId && o.CarpoolId == carpoolId).FirstOrDefault();
+                if (record != null)
+                {
+                    this.ChangeTracker.Clear();
+                    record.StatusId = (int)CARPOOL_REQUEST_STATUS.NEW;
+                    this.Entry(record).State = EntityState.Modified;
+                    this.SaveChanges();
+                }
+                else
+                {
+                    KidsInCarpool obj = new KidsInCarpool()
+                    {
+                        KidId = kidId,
+                        CarpoolId = carpoolId,
+                        StatusId = (int)CARPOOL_REQUEST_STATUS.NEW
+                    };
 
-                this.SaveChanges();
+                    this.ChangeTracker.Clear();
+                    this.Entry(obj).State = EntityState.Added;
+                    this.SaveChanges();
+                }
                 return true;
             }
             catch (Exception e)
@@ -455,16 +479,16 @@ namespace CarpoolServerBL.Models
         #endregion
 
         #region GetRequestsToJoinCarpool
-        public List<RequestToJoinCarpool> GetRequestsToJoinCarpool(int adultId)
+        public List<KidsInCarpool> GetRequestsToJoinCarpool(int adultId)
         {
             try
             {
-                List<RequestToJoinCarpool> list = this.RequestToJoinCarpools
+                List<KidsInCarpool> list = this.KidsInCarpools
                     .Include(c => c.Carpool)
                     .Include(k => k.Kid)
                     .Include(k => k.Kid.IdNavigation)
-                    .Include(r => r.RequestStatus)
-                    .Where(c => c.Carpool.AdultId == adultId && c.RequestStatusId == 3).ToList();
+                    .Include(r => r.Status)
+                    .Where(c => c.Carpool.AdultId == adultId && c.StatusId == (int)CARPOOL_REQUEST_STATUS.NEW).ToList();
                 return list;
             }
             catch (Exception e)
@@ -476,44 +500,69 @@ namespace CarpoolServerBL.Models
         #endregion
 
         #region ApproveRequestToJoinCarpool
-        public void ApproveRequestToJoinCarpool(RequestToJoinCarpool request)
+        public bool ApproveRequestToJoinCarpool(int kidId, int carpoolId)
         {
             try
             {
-                KidsInCarpool kidsIn = new KidsInCarpool()
+                //Check if the record exist in the DB
+                KidsInCarpool record = KidsInCarpools.Where(o => o.KidId == kidId && o.CarpoolId == carpoolId).FirstOrDefault();
+                if (record != null)
                 {
-                    //Kid = request.Kid,
-                    KidId = request.KidId,
-                    //Carpool = request.Carpool,
-                    CarpoolId = request.CarpoolId
-                };
+                    this.ChangeTracker.Clear();
+                    record.StatusId = (int)CARPOOL_REQUEST_STATUS.APPROVED;
+                    this.Entry(record).State = EntityState.Modified;
+                    this.SaveChanges();
+                    return true;
+                }
+                return false;
 
-                this.Entry(kidsIn).State = EntityState.Added;
-                request.RequestStatusId = (int)CARPOOL_REQUEST_STATUS.APPROVED;
-                this.Entry(request).State = EntityState.Modified;
+                //KidsInCarpool kidsIn = new KidsInCarpool()
+                //{
+                //    KidId = request.KidId,
+                //    CarpoolId = request.CarpoolId
+                //};
 
-                this.SaveChanges();
+                //this.Entry(kidsIn).State = EntityState.Added;
+                //request.RequestStatusId = (int)CARPOOL_REQUEST_STATUS.APPROVED;
+                //this.Entry(request).State = EntityState.Modified;
+
+                //this.SaveChanges();
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
+                return false;
             }
         }
         #endregion
 
-        #region DeleteRequestToJoinCarpool
-        public void DeleteRequestToJoinCarpool(RequestToJoinCarpool request)
+        #region DeclineRequestToJoinCarpool
+        public bool DeclineRequestToJoinCarpool(int kidId, int carpoolId)
         {
             try
             {
-                request.RequestStatusId = (int)CARPOOL_REQUEST_STATUS.DECLINED;
-                this.Entry(request).State = EntityState.Modified;
+                //Check if the record exist in the DB
+                KidsInCarpool record = KidsInCarpools.Where(o => o.KidId == kidId && o.CarpoolId == carpoolId).FirstOrDefault();
+                if (record != null)
+                {
+                    this.ChangeTracker.Clear();
+                    record.StatusId = (int)CARPOOL_REQUEST_STATUS.DECLINED;
+                    this.Entry(record).State = EntityState.Modified;
+                    this.SaveChanges();
+                    return true;
+                }
+                return false;
 
-                this.SaveChanges();
+
+                //request.RequestStatusId = (int)CARPOOL_REQUEST_STATUS.DECLINED;
+                //this.Entry(request).State = EntityState.Modified;
+
+                //this.SaveChanges();
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
+                return false;
             }
         }
         #endregion

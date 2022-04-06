@@ -9,19 +9,12 @@ namespace CarpoolServerBL.Models
     {
         public RequestCarpoolStatus()
         {
-            RequestToJoinCarpools = new HashSet<RequestToJoinCarpool>();
+            KidsInCarpools = new HashSet<KidsInCarpool>();
         }
 
         public int RequestId { get; set; }
         public string RequestName { get; set; }
 
-        public virtual ICollection<RequestToJoinCarpool> RequestToJoinCarpools { get; set; }
-    }
-
-    public enum CARPOOL_REQUEST_STATUS
-    {
-        APPROVED = 1,
-        DECLINED = 2,
-        NEW = 3
+        public virtual ICollection<KidsInCarpool> KidsInCarpools { get; set; }
     }
 }
