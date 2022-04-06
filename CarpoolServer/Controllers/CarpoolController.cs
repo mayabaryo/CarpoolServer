@@ -540,7 +540,7 @@ namespace CarpoolServer.Controllers
 
         #region AddRequestToJoinCarpool
         [Route("AddRequestToJoinCarpool")]
-        [HttpPost]
+        [HttpGet]
         public bool AddRequestToJoinCarpool([FromQuery] int kidId, [FromQuery] int carpoolId)
         {
 
@@ -604,7 +604,7 @@ namespace CarpoolServer.Controllers
 
         #region ApproveRequestToJoinCarpool
         [Route("ApproveRequestToJoinCarpool")]
-        [HttpPost]
+        [HttpGet]
         public bool ApproveRequestToJoinCarpool([FromQuery] int kidId, [FromQuery] int carpoolId)
         {
             bool approved = this.context.ApproveRequestToJoinCarpool(kidId, carpoolId);
@@ -635,7 +635,7 @@ namespace CarpoolServer.Controllers
 
         #region DeclineRequestToJoinCarpool
         [Route("DeclineRequestToJoinCarpool")]
-        [HttpPost]
+        [HttpGet]
         public bool DeclineRequestToJoinCarpool([FromQuery] int kidId, [FromQuery] int carpoolId)
         {
             bool declined = this.context.DeclineRequestToJoinCarpool(kidId, carpoolId);

@@ -314,7 +314,7 @@ namespace CarpoolServerBL.Models
             {
                 List<Carpool> carpools = new List<Carpool>();
                 List<int> carpoolsId = new List<int>();
-                IQueryable<KidsInCarpool> kidsInCarpools = this.KidsInCarpools.Where(k => k.KidId == kid.IdNavigation.Id);
+                IQueryable<KidsInCarpool> kidsInCarpools = this.KidsInCarpools.Where(k => k.KidId == kid.IdNavigation.Id && k.StatusId == (int)CARPOOL_REQUEST_STATUS.APPROVED);
                 if (kidsInCarpools != null)
                 {
                     foreach (KidsInCarpool kidsIn in kidsInCarpools)
@@ -413,7 +413,7 @@ namespace CarpoolServerBL.Models
             {
                 List<Kid> kids = new List<Kid>();
                 List<int> kidsId = new List<int>();
-                IQueryable<KidsInCarpool> kidsInCarpool = this.KidsInCarpools.Where(a => a.CarpoolId == carpool.Id);
+                IQueryable<KidsInCarpool> kidsInCarpool = this.KidsInCarpools.Where(a => a.CarpoolId == carpool.Id && a.StatusId == (int)CARPOOL_REQUEST_STATUS.APPROVED);
                 if (kidsInCarpool != null)
                 {
                     foreach (KidsInCarpool kidsIn in kidsInCarpool)
