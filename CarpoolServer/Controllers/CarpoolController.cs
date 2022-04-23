@@ -665,6 +665,44 @@ namespace CarpoolServer.Controllers
         }
         #endregion
 
+        #region CarpoolInProcess
+        [Route("CarpoolInProcess")]
+        [HttpGet]
+        public bool CarpoolInProcess([FromQuery] int carpoolId)
+        {
+            bool succeed = this.context.CarpoolInProcess(carpoolId);
+            if (succeed)
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                return true;
+            }
+            else
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return false;
+            }
+        }
+        #endregion
+
+        #region CarpoolEnded
+        [Route("CarpoolEnded")]
+        [HttpGet]
+        public bool CarpoolEnded([FromQuery] int carpoolId)
+        {
+            bool succeed = this.context.CarpoolEnded(carpoolId);
+            if (succeed)
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                return true;
+            }
+            else
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return false;
+            }
+        }
+        #endregion
+
         #region IsEmailExist
         [Route("IsEmailExist")]
         [HttpGet]

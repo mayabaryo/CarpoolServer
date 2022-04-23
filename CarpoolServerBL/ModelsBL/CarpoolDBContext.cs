@@ -14,6 +14,12 @@ namespace CarpoolServerBL.Models
         DECLINED = 2,
         NEW = 3
     }
+    public enum CARPOOL_STATUS
+    {
+        NotStarted = 1,
+        InProcess = 2,
+        Ended = 3
+    }
     public partial class CarpoolDBContext : DbContext
     {
         #region Login
@@ -486,6 +492,8 @@ namespace CarpoolServerBL.Models
                 List<KidsInCarpool> list = this.KidsInCarpools
                     .Include(c => c.Carpool)
                     .Include(k => k.Kid)
+                    .Include(k => k.Kid.KidsOfAdults)
+                    .ThenInclude(k => k.Adult.IdNavigation)
                     .Include(k => k.Kid.IdNavigation)
                     .Include(r => r.Status)
                     .Where(c => c.Carpool.AdultId == adultId && c.StatusId == (int)CARPOOL_REQUEST_STATUS.NEW).ToList();
@@ -558,6 +566,56 @@ namespace CarpoolServerBL.Models
                 //this.Entry(request).State = EntityState.Modified;
 
                 //this.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+        }
+        #endregion
+
+        #region CarpoolInProcess
+        public bool CarpoolInProcess(int carpoolId)
+        {
+            try
+            {
+                //Check if the record exist in the DB
+                Carpool record = Carpools.Where(o => o.Id == carpoolId).FirstOrDefault();
+                if (record != null)
+                {
+                    this.ChangeTracker.Clear();
+                    record.CarpoolStatusId = (int)CARPOOL_STATUS.InProcess;
+                    this.Entry(record).State = EntityState.Modified;
+                    this.SaveChanges();
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+        }
+        #endregion
+
+        #region CarpoolEnded
+        public bool CarpoolEnded(int carpoolId)
+        {
+            try
+            {
+                //Check if the record exist in the DB
+                Carpool record = Carpools.Where(o => o.Id == carpoolId).FirstOrDefault();
+                if (record != null)
+                {
+                    this.ChangeTracker.Clear();
+                    record.CarpoolStatusId = (int)CARPOOL_STATUS.Ended;
+                    this.Entry(record).State = EntityState.Modified;
+                    this.SaveChanges();
+                    return true;
+                }
+                return false;
             }
             catch (Exception e)
             {
