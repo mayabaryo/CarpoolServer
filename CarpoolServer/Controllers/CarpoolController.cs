@@ -760,6 +760,26 @@ namespace CarpoolServer.Controllers
         }
         #endregion
 
+        #region IsKidInActiveCarpool
+        [Route("IsKidInActiveCarpool")]
+        [HttpPost]
+        public Carpool IsKidInActiveCarpool([FromBody] Kid kid)
+        {
+            if (kid != null)
+            {
+                Carpool carpool = this.context.IsKidInActiveCarpool(kid);
+
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                return carpool;
+            }
+            else
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return null;
+            }
+        }
+        #endregion
+
         #region UploadImage
         [Route("UploadImage")]
         [HttpPost]

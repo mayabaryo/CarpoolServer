@@ -669,5 +669,30 @@ namespace CarpoolServerBL.Models
             }
         }
         #endregion
+
+        #region GetKidCarpools
+        public Carpool IsKidInActiveCarpool(Kid kid)
+        {
+            try
+            {
+                List<Carpool> carpools = this.GetKidCarpools(kid);
+                if (carpools != null)
+                {
+                    foreach (Carpool carpool in carpools)
+                    {
+                        if (carpool.CarpoolStatusId == (int)CARPOOL_STATUS.InProcess)
+                            return carpool;
+                    }
+                    
+                }
+                return null;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+        }
+        #endregion
     }
 }
