@@ -233,6 +233,7 @@ namespace CarpoolServerBL.Models
         {
             try
             {
+                kidsIn.StatusId = (int)CARPOOL_STATUS.NotStarted;
                 this.KidsInCarpools.Add(kidsIn);
                 this.SaveChanges();
             }
