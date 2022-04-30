@@ -42,24 +42,45 @@ namespace CarpoolServerBL.Models
         #endregion
 
         #region UpdateUser
-        public User UpdateUser(User user, User updatedUser)
+        public User UpdateUser(User currentUser, User updatedUser)
         {
             try
             {
-                User currentUser = this.Users
-                .Where(u => u.Id == user.Id).FirstOrDefault();
+                //User currentUser = this.Users
+                //.Where(u => u.Id == user.Id).FirstOrDefault();
 
-                currentUser.FirstName = updatedUser.FirstName;
-                currentUser.LastName = updatedUser.LastName;
-                currentUser.UserPswd = updatedUser.UserPswd;
-                currentUser.BirthDate = updatedUser.BirthDate;
-                currentUser.PhoneNum = updatedUser.PhoneNum;
-                currentUser.City = updatedUser.City;
-                currentUser.Street = updatedUser.Street;
-                currentUser.HouseNum = updatedUser.HouseNum;
+                if (currentUser != null)
+                {
+                    this.ChangeTracker.Clear();
+                    //record.CarpoolStatusId = (int)CARPOOL_STATUS.InProcess;
 
-                this.SaveChanges();
-                return currentUser;
+                    currentUser.FirstName = updatedUser.FirstName;
+                    currentUser.LastName = updatedUser.LastName;
+                    currentUser.UserPswd = updatedUser.UserPswd;
+                    currentUser.BirthDate = updatedUser.BirthDate;
+                    currentUser.PhoneNum = updatedUser.PhoneNum;
+                    currentUser.City = updatedUser.City;
+                    currentUser.Street = updatedUser.Street;
+                    currentUser.HouseNum = updatedUser.HouseNum;
+
+                    this.Entry(currentUser).State = EntityState.Modified;
+                    this.SaveChanges();
+
+                    return currentUser;
+                }
+
+                return null;
+
+                //currentUser.FirstName = updatedUser.FirstName;
+                //currentUser.LastName = updatedUser.LastName;
+                //currentUser.UserPswd = updatedUser.UserPswd;
+                //currentUser.BirthDate = updatedUser.BirthDate;
+                //currentUser.PhoneNum = updatedUser.PhoneNum;
+                //currentUser.City = updatedUser.City;
+                //currentUser.Street = updatedUser.Street;
+                //currentUser.HouseNum = updatedUser.HouseNum;
+
+                //this.SaveChanges();
             }
             catch (Exception e)
             {
