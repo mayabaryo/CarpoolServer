@@ -28,8 +28,9 @@ namespace CarpoolServerBL.Models
             try
             {
                 User user = this.Users
-                .Include(us => us.Adult).Include(us => us.Adult.Activities).Include(us => us.Adult.Carpools).Include(us => us.Adult.KidsOfAdults)
-                .Include(us => us.Kid).Include(us => us.Kid.KidsInActivities).Include(us => us.Kid.KidsInCarpools).Include(us => us.Kid.KidsOfAdults)
+                .Include(us => us.Adult).Include(us => us.Adult.Activities).Include(us => us.Adult.Carpools)
+                .Include(us => us.Adult.KidsOfAdults).Include(us => us.Kid).Include(us => us.Kid.KidsInActivities)
+                .Include(us => us.Kid.KidsInCarpools).Include(us => us.Kid.KidsOfAdults)
                 .Where(u => (u.Email == email || u.UserName == email) && u.UserPswd == pswd).FirstOrDefault();
                 return user;
             }
@@ -441,7 +442,15 @@ namespace CarpoolServerBL.Models
             {
                 List<Kid> kids = new List<Kid>();
                 List<int> kidsId = new List<int>();
-                IQueryable<KidsInCarpool> kidsInCarpool = this.KidsInCarpools.Where(a => a.CarpoolId == carpool.Id && a.StatusId == (int)CARPOOL_REQUEST_STATUS.APPROVED);
+                IQueryable<KidsInCarpool> kidsInCarpool = this.KidsInCarpools
+                    .Include(c => c.Carpool)
+                    .Include(k => k.Kid)
+                    .Include(k => k.Kid.KidsOfAdults)
+                    .ThenInclude(k => k.Adult.IdNavigation)
+                    .Include(k => k.Kid.IdNavigation)
+                    .Include(r => r.Status)
+                    .Where(a => a.CarpoolId == carpool.Id && a.StatusId == (int)CARPOOL_REQUEST_STATUS.APPROVED);
+
                 if (kidsInCarpool != null)
                 {
                     foreach (KidsInCarpool kidsIn in kidsInCarpool)
