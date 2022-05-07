@@ -8,11 +8,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration; //This one adds the GetConnectionString method to Configuration
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using CarpoolServerBL.Models;
+
+//for the live carpool
+using CarpoolServer.Hubs;
 
 namespace CarpoolServer
 {
@@ -57,6 +60,7 @@ namespace CarpoolServer
                                                                 .UseSqlServer(connectionString));
             //.UseLazyLoadingProxies());
             #endregion
+
             #region Read Email and email password
             Object email = this.Configuration.GetValue(typeof(string), "ServerEmail");
             Object emailPassword = this.Configuration.GetValue(typeof(string), "ServerEmailPassword");
@@ -64,6 +68,9 @@ namespace CarpoolServer
             ServerEmail = email.ToString();
             ServerEmailPassword = emailPassword.ToString();
             #endregion
+
+            //Add SignalR
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -81,6 +88,8 @@ namespace CarpoolServer
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                //for the live carpool
+                //endpoints.MapHub<CarpoolHub>("/carpool");
             });
         }
     }
