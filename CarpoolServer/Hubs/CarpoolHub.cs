@@ -25,11 +25,11 @@ namespace CarpoolServer.Hubs
             await base.OnConnectedAsync();
         }
 
-        public async Task OnConnect(string groupName)
-        {
-            await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
-            await base.OnConnectedAsync();
-        }
+        //public async Task OnConnect(string groupName)
+        //{
+        //    await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
+        //    await base.OnConnectedAsync();
+        //}
 
         public async Task OnDisconnect(string[] groupNames)
         {
@@ -38,10 +38,10 @@ namespace CarpoolServer.Hubs
             await base.OnDisconnectedAsync(null);
         }
 
-        public async Task OnDisconnect(string groupName)
-        {
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
-            await base.OnDisconnectedAsync(null);
-        }
+        //public async Task OnDisconnect(string groupName)
+        //{
+        //    await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
+        //    await base.OnDisconnectedAsync(null);
+        //}
     }
 }

@@ -89,7 +89,7 @@ namespace CarpoolServer
             {
                 endpoints.MapControllers();
                 //for the live carpool
-                //endpoints.MapHub<CarpoolHub>("/carpool");
+                endpoints.MapHub<CarpoolHub>("/carpool");
             });
         }
     }

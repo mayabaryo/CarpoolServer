@@ -95,32 +95,59 @@ namespace CarpoolServer.Controllers
         #region AdultSignUp
         [Route("AdultSignUp")]
         [HttpPost]
-        public Adult AdultSignUp([FromBody] Adult adult)
+        public User AdultSignUp([FromBody] Adult adult)
         {
             //Check user name and password
             if (adult != null)
             {
-                this.context.AdultSignUp(adult);
+                User user = this.context.AdultSignUp(adult);
 
-                try
+                if (user != null)
                 {
-                    //Copy defualt image for this adult
-                    var pathFrom = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", "defaultphoto.jpg");
-                    var pathTo = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", $"{adult.Id}.jpg");
-                    System.IO.File.Copy(pathFrom, pathTo);
+                    try
+                    {
+                        //Copy defualt image for this adult
+                        var pathFrom = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", "defaultphoto.jpg");
+                        var pathTo = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", $"{adult.Id}.jpg");
+                        System.IO.File.Copy(pathFrom, pathTo);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+
+                    HttpContext.Session.SetObject("theUser", user);
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+
+                    //Important! Due to the Lazy Loading, the user will be returned with all of its contects!!
+                    return user;
                 }
-                catch (Exception e)
+                else
                 {
-                    Console.WriteLine(e.Message);
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                    return null;
                 }
 
-                //adult.IdNavigation.Photo = $"{adult.Id}.jpg";
-                //this.context.SaveChanges();
 
-                HttpContext.Session.SetObject("theUser", adult);
-                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-                //Important! Due to the Lazy Loading, the user will be returned with all of its contects!!
-                return adult;
+                //try
+                //{
+                //    //Copy defualt image for this adult
+                //    var pathFrom = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", "defaultphoto.jpg");
+                //    var pathTo = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", $"{adult.Id}.jpg");
+                //    System.IO.File.Copy(pathFrom, pathTo);
+                //}
+                //catch (Exception e)
+                //{
+                //    Console.WriteLine(e.Message);
+                //}
+
+                ////adult.IdNavigation.Photo = $"{adult.Id}.jpg";
+                ////this.context.SaveChanges();
+
+                //HttpContext.Session.SetObject("theUser", adult);
+                //Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                ////Important! Due to the Lazy Loading, the user will be returned with all of its contects!!
+                //return adult;
             }
             else
             {

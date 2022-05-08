@@ -55,6 +55,8 @@ namespace CarpoolServerBL.Models
                     this.ChangeTracker.Clear();
                     //record.CarpoolStatusId = (int)CARPOOL_STATUS.InProcess;
 
+                    currentUser.Email = updatedUser.Email;
+                    currentUser.UserName = updatedUser.UserName;
                     currentUser.FirstName = updatedUser.FirstName;
                     currentUser.LastName = updatedUser.LastName;
                     currentUser.UserPswd = updatedUser.UserPswd;
@@ -109,16 +111,25 @@ namespace CarpoolServerBL.Models
         #endregion
 
         #region AdultSignUp
-        public void AdultSignUp(Adult adult)
+        public User AdultSignUp(Adult adult)
         {
             try
             {
                 this.Adults.Add(adult);
                 this.SaveChanges();
+
+                User user = this.Users
+                .Include(us => us.Adult).Include(us => us.Adult.Activities).Include(us => us.Adult.Carpools)
+                .Include(us => us.Adult.KidsOfAdults).Include(us => us.Kid).Include(us => us.Kid.KidsInActivities)
+                .Include(us => us.Kid.KidsInCarpools).Include(us => us.Kid.KidsOfAdults)
+                .Where(u => (u.Email == adult.IdNavigation.Email) && u.UserPswd == adult.IdNavigation.UserPswd).FirstOrDefault();
+
+                return user;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
+                return null;
             }
         }
         #endregion
