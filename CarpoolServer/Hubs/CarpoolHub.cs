@@ -8,20 +8,24 @@ namespace CarpoolServer.Hubs
 {
     public class CarpoolHub : Hub
     {
-        public async Task SendMessageToGroup(string user, string message, string groupName)
+        public async Task SendKidOnBoard(int carpoolId, int kidId)
         {
-            IClientProxy proxy = Clients.Group(groupName);
-            await proxy.SendAsync("ReceiveMessageFromGroup", user, message, groupName);
+            IClientProxy proxy = Clients.Group(carpoolId.ToString());
+            await proxy.SendAsync("UpdateKidOnBoard", kidId);
         }
-        public async Task SendMessage(string user, string message)
+        public async Task SendLocation(int carpoolId, double longitude, double latitude)
         {
-            await Clients.All.SendAsync("ReceiveMessage", user, message);
+            IClientProxy proxy = Clients.Group(carpoolId.ToString());
+            await proxy.SendAsync("UpdateDriverLocation", longitude, latitude);
         }
-
-        public async Task OnConnect(string[] groupNames)
+        public async Task SendArriveToDestination(int carpoolId)
         {
-            foreach (string groupName in groupNames)
-                await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
+            IClientProxy proxy = Clients.Group(carpoolId.ToString());
+            await proxy.SendAsync("UpdateArriveToDestination");
+        }
+        public async Task OnConnect(int carpoolId)
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, carpoolId.ToString());
             await base.OnConnectedAsync();
         }
 
@@ -31,10 +35,9 @@ namespace CarpoolServer.Hubs
         //    await base.OnConnectedAsync();
         //}
 
-        public async Task OnDisconnect(string[] groupNames)
+        public async Task OnDisconnect(int carpoolId)
         {
-            foreach (string groupName in groupNames)
-                await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, carpoolId.ToString());
             await base.OnDisconnectedAsync(null);
         }
 
