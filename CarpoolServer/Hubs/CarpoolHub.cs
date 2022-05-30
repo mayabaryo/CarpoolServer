@@ -46,5 +46,11 @@ namespace CarpoolServer.Hubs
         //    await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
         //    await base.OnDisconnectedAsync(null);
         //}
+
+        public async Task StartDrive(int carpoolId)
+        {
+            IClientProxy proxy = Clients.Group(carpoolId.ToString());
+            await proxy.SendAsync("StartDrive");
+        }
     }
 }
