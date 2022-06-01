@@ -161,3 +161,8 @@ ALTER Table kidsIncarpools
 ADD FOREIGN KEY (StatusID) REFERENCES RequestCarpoolStatus(RequestID)
 Go
 
+ALTER Table kidsInCarpools
+ADD KidOnBoard bit default(0)
+GO
+
+select * from KidsInCarpools

@@ -3,20 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
+using CarpoolServerBL.Models;
 
 namespace CarpoolServer.Hubs
 {
     public class CarpoolHub : Hub
     {
+        private CarpoolDBContext context;
+        public CarpoolHub(CarpoolDBContext context)
+        {
+            this.context = context;
+        }
         public async Task SendKidOnBoard(int carpoolId, int kidId)
         {
+            context.UpdateKidOnBoard(carpoolId, kidId);
             IClientProxy proxy = Clients.Group(carpoolId.ToString());
             await proxy.SendAsync("UpdateKidOnBoard", kidId);
         }
-        public async Task SendLocation(int carpoolId, double longitude, double latitude)
+        public async Task SendLocation(int carpoolId, double latitude, double longitude)
         {
             IClientProxy proxy = Clients.Group(carpoolId.ToString());
-            await proxy.SendAsync("UpdateDriverLocation", longitude, latitude);
+            await proxy.SendAsync("UpdateDriverLocation", latitude, longitude);
         }
         public async Task SendArriveToDestination(int carpoolId)
         {

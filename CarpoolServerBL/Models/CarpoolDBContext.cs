@@ -89,6 +89,9 @@ namespace CarpoolServerBL.Models
 
             modelBuilder.Entity<Carpool>(entity =>
             {
+                entity.HasIndex(e => new { e.AdultId, e.ActivityId }, "UC_AdultID_ActivityID")
+                    .IsUnique();
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.ActivityId).HasColumnName("ActivityID");
@@ -174,6 +177,8 @@ namespace CarpoolServerBL.Models
 
                 entity.Property(e => e.CarpoolId).HasColumnName("CarpoolID");
 
+                entity.Property(e => e.KidOnBoard).HasDefaultValueSql("((0))");
+
                 entity.Property(e => e.StatusId)
                     .HasColumnName("StatusID")
                     .HasDefaultValueSql("((3))");
@@ -194,7 +199,7 @@ namespace CarpoolServerBL.Models
                     .WithMany(p => p.KidsInCarpools)
                     .HasForeignKey(d => d.StatusId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__KidsInCar__Statu__4AB81AF0");
+                    .HasConstraintName("FK__KidsInCar__Statu__5535A963");
             });
 
             modelBuilder.Entity<KidsOfAdult>(entity =>

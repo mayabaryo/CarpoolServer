@@ -384,6 +384,34 @@ namespace CarpoolServerBL.Models
         }
         #endregion
 
+        #region GetAllKidsCarpools
+        public List<Carpool> GetAllKidsCarpools(Adult adult)
+        {
+            try
+            {
+                List<Kid> kids = this.GetAllKids(adult);
+                List<Carpool> allCarpools = new List<Carpool>();
+
+                foreach (Kid kid in kids)
+                {
+                    List<Carpool> kidCarpools = this.GetKidCarpools(kid);
+
+                    foreach (Carpool c in kidCarpools)
+                    {
+                        if (!allCarpools.Contains(c) && c.AdultId != adult.Id)
+                            allCarpools.Add(c);                                                
+                    }
+                }                
+                return allCarpools;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+        }
+        #endregion
+
         #region GetAdultCarpools
         public List<Carpool> GetAdultCarpools(Adult adult)
         {
@@ -712,7 +740,7 @@ namespace CarpoolServerBL.Models
         }
         #endregion
 
-        #region GetKidCarpools
+        #region IsKidInActiveCarpool
         public Carpool IsKidInActiveCarpool(Kid kid)
         {
             try
@@ -734,6 +762,28 @@ namespace CarpoolServerBL.Models
                 Console.WriteLine(e.Message);
                 return null;
             }
+        }
+        #endregion
+
+        #region UpdateKidOnBoard
+        public async void UpdateKidOnBoard(int carpoolId, int kidId)
+        {
+            try
+            {
+                KidsInCarpool k = new KidsInCarpool()
+                {
+                    CarpoolId = carpoolId,
+                    KidId = kidId,
+                    KidOnBoard = true
+                };
+                this.Entry(k).State = EntityState.Modified;
+                await this.SaveChangesAsync();
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            
         }
         #endregion
     }
