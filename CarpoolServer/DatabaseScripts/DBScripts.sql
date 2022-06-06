@@ -165,4 +165,8 @@ ALTER Table kidsInCarpools
 ADD KidOnBoard bit default(0)
 GO
 
+ALTER Table Activities
+DROP COLUMN Recurring, EntryCode
+GO
+
 select * from KidsInCarpools

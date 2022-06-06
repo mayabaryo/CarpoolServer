@@ -39,7 +39,7 @@ namespace CarpoolServerBL.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "Hebrew_CI_AS");
+            modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
             modelBuilder.Entity<Activity>(entity =>
             {
@@ -56,10 +56,6 @@ namespace CarpoolServerBL.Models
                     .HasMaxLength(30);
 
                 entity.Property(e => e.EndTime).HasColumnType("datetime");
-
-                entity.Property(e => e.EntryCode)
-                    .IsRequired()
-                    .HasMaxLength(30);
 
                 entity.Property(e => e.StartTime).HasColumnType("datetime");
 
@@ -89,9 +85,6 @@ namespace CarpoolServerBL.Models
 
             modelBuilder.Entity<Carpool>(entity =>
             {
-                entity.HasIndex(e => new { e.AdultId, e.ActivityId }, "UC_AdultID_ActivityID")
-                    .IsUnique();
-
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.ActivityId).HasColumnName("ActivityID");
@@ -124,7 +117,7 @@ namespace CarpoolServerBL.Models
             modelBuilder.Entity<CarpoolStatus>(entity =>
             {
                 entity.HasKey(e => e.StatusId)
-                    .HasName("PK__CarpoolS__C8EE2043AE2544BF");
+                    .HasName("PK__CarpoolS__C8EE204386F21EC1");
 
                 entity.ToTable("CarpoolStatus");
 
@@ -199,7 +192,7 @@ namespace CarpoolServerBL.Models
                     .WithMany(p => p.KidsInCarpools)
                     .HasForeignKey(d => d.StatusId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__KidsInCar__Statu__5535A963");
+                    .HasConstraintName("FK__KidsInCar__Statu__6EF57B66");
             });
 
             modelBuilder.Entity<KidsOfAdult>(entity =>
@@ -226,7 +219,7 @@ namespace CarpoolServerBL.Models
             modelBuilder.Entity<RequestCarpoolStatus>(entity =>
             {
                 entity.HasKey(e => e.RequestId)
-                    .HasName("PK__RequestC__33A8519AF135BBEA");
+                    .HasName("PK__RequestC__33A8519A56381E9C");
 
                 entity.ToTable("RequestCarpoolStatus");
 
