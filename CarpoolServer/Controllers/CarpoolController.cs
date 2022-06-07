@@ -400,36 +400,6 @@ namespace CarpoolServer.Controllers
                 IdNavigation = currentUser
             };
 
-            //if (adult != null)
-            //{
-            //    try
-            //    {
-            //        List<Kid> kids = new List<Kid>();
-            //        List<int> kidsId = new List<int>();
-            //        IQueryable<KidsOfAdult> kidsOfAdults = context.KidsOfAdults.Where(a => a.AdultId == currentAdult.IdNavigation.Id);
-            //        if (kidsOfAdults != null)
-            //        {
-            //            foreach (KidsOfAdult kidsOf in kidsOfAdults)
-            //            {
-            //                kidsId.Add(kidsOf.KidId);
-            //            }
-            //            foreach (int kidId in kidsId)
-            //            {
-            //                Kid kid = context.Kids.Where(k => k.Id == kidId).FirstOrDefault();
-            //                kids.Add(kid);
-            //            }
-            //        }
-            //        return kids;
-            //    }
-            //    catch (Exception e)
-            //    {
-            //        Console.WriteLine(e.Message);
-            //        return null;
-            //    }
-            //}
-            //return null;
-
-
             List<Kid> kids = this.context.GetAllKids(currentAdult);
 
             if (kids != null)
@@ -443,27 +413,7 @@ namespace CarpoolServer.Controllers
                 return null;
             }
         }
-        #endregion
-
-        //#region GetAllActivities
-        //[Route("GetAllActivities")]
-        //[HttpGet]
-        //public List<Activity> GetAllActivities([FromQuery] Kid kid)
-        //{
-        //    List<Activity> activities = this.context.GetAllActivities(kid);
-
-        //    if (activities != null)
-        //    {
-        //        Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-        //        return activities;
-        //    }
-        //    else
-        //    {
-        //        Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
-        //        return null;
-        //    }
-        //}
-        //#endregion
+        #endregion        
 
         #region GetKidActivities
         [Route("GetKidActivities")]
@@ -602,27 +552,6 @@ namespace CarpoolServer.Controllers
                 Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
                 return false;
             }
-
-            ////Check user name and password
-            //if (request != null)
-            //{
-            //    bool addRequest = this.context.AddRequestToJoinCarpool(request);
-
-            //    if (addRequest)
-            //    {
-            //        //HttpContext.Session.SetObject("theUser", request);
-            //        Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-            //        //Important! Due to the Lazy Loading, the user will be returned with all of its contects!!
-            //        return true;
-            //    }
-            //    else
-            //        return false;
-            //}
-            //else
-            //{
-            //    Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
-            //    return false;
-            //}
         }
         #endregion
 
@@ -642,10 +571,6 @@ namespace CarpoolServer.Controllers
                 Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
                 return null;
             }
-
-
-            //List<RequestToJoinCarpool> requests = this.context.GetRequestsToJoinCarpool(adultId);
-            //return requests;
         }
         #endregion
 
@@ -664,19 +589,7 @@ namespace CarpoolServer.Controllers
             {
                 Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
                 return false;
-            }
-
-            //if (request != null)
-            //{
-            //    this.context.ApproveRequestToJoinCarpool(request);
-            //    Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-            //    return true;
-            //}
-            //else
-            //{
-            //    Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
-            //    return false;
-            //}            
+            }         
         }
         #endregion
 
@@ -696,19 +609,6 @@ namespace CarpoolServer.Controllers
                 Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
                 return false;
             }
-
-
-            //if (request != null)
-            //{
-            //    this.context.DeleteRequestToJoinCarpool(request);
-            //    Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-            //    return true;
-            //}
-            //else
-            //{
-            //    Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
-            //    return false;
-            //}
         }
         #endregion
 
