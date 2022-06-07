@@ -169,4 +169,6 @@ ALTER Table Activities
 DROP COLUMN Recurring, EntryCode
 GO
 
-select * from KidsInCarpools
+INSERT INTO Users
+VALUES ('maya.baryo@gmail.com', 'מאיה', 'מאיה', 'בר יוסף', '444444', '2000-7-10', '0598747642', 'photo', 'הוד השרון', 'הבבלי', '4')
+GO
