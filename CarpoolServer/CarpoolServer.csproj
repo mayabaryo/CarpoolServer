@@ -5,11 +5,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="SendGrid" Version="9.28.0" />
     <PackageReference Include="System.Text.Json" Version="5.0.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\CarpoolServerBL\CarpoolServerBL.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="MailSender\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="SendGridLib">
+      <HintPath>MailSender\SendGridLib.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

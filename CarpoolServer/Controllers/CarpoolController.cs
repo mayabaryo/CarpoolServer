@@ -9,7 +9,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
-
+using SendGridLib;
 namespace CarpoolServer.Controllers
 {
     [Route("CarpoolAPI")]
@@ -55,15 +55,20 @@ namespace CarpoolServer.Controllers
             }
         }
 
+        private static async void SendEmail2(string subject, string body, string to, string toName, string from, string fromName, string pswd, string smtpUrl)
+        {
+            await MailSender.SendEmail(fromName, to, toName, subject, body, "");
+        }
+
         [Route("SendEmailHelper")]
         [HttpGet]
         public void SendEmailHelper([FromQuery] string body, [FromQuery] string to, [FromQuery] string toName)
         {
-            string subject = "סיסמת פעילות";
+            string subject = "התראה";
             string from = Startup.ServerEmail;
             string fromName = "Carpool App";
             string pswrd = Startup.ServerEmailPassword;
-            SendEmail(subject, body, to, toName, from, fromName, pswrd, "smtp.gmail.com");
+            SendEmail2(subject, body, to, toName, from, fromName, pswrd, "smtp.gmail.com");
         }
         #endregion
 
@@ -171,8 +176,6 @@ namespace CarpoolServer.Controllers
                     IdNavigation = currentUser
                 };
 
-                //this.context.AddKid(currentAdult, kid);
-
                 try
                 {
                     context.Kids.Add(kid);
@@ -248,12 +251,19 @@ namespace CarpoolServer.Controllers
                     IdNavigation = currentUser
                 };
 
-                this.context.AddAdult(currentAdult, adult);
+                try
+                {
+                    this.context.AddAdult(currentAdult, adult);
 
-                //Copy defualt image for this adult
-                var pathFrom = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", "defaultphoto.jpg");
-                var pathTo = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", $"{adult.Id}.jpg");
-                System.IO.File.Copy(pathFrom, pathTo);
+                    //Copy defualt image for this adult
+                    var pathFrom = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", "defaultphoto.jpg");
+                    var pathTo = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", $"{adult.Id}.jpg");
+                    System.IO.File.Copy(pathFrom, pathTo);                    
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
 
                 Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
                 //Important! Due to the Lazy Loading, the user will be returned with all of its contects!!

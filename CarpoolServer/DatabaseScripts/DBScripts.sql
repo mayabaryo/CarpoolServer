@@ -169,6 +169,8 @@ ALTER Table Activities
 DROP COLUMN Recurring, EntryCode
 GO
 
+
 INSERT INTO Users
-VALUES ('maya.baryo@gmail.com', 'מאיה', 'מאיה', 'בר יוסף', '444444', '2000-7-10', '0598747642', 'photo', 'הוד השרון', 'הבבלי', '4')
+VALUES ('maya.baryom@gmail.com', 'מאיwה', 'מאיה', 'בר יוסף', '444444', '2000-7-10', '0598747642', 'http://10.0.2.2:13939/Images/defaultphoto.jpg', 'הוד השרון', 'הבבלי', '4')
+INSERT INTO Adults VALUES(@@Identity)
 GO
