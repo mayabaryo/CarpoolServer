@@ -392,16 +392,22 @@ namespace CarpoolServerBL.Models
                 List<Kid> kids = this.GetAllKids(adult);
                 List<Carpool> allCarpools = new List<Carpool>();
 
-                foreach (Kid kid in kids)
+                if (kids != null)
                 {
-                    List<Carpool> kidCarpools = this.GetKidCarpools(kid);
-
-                    foreach (Carpool c in kidCarpools)
+                    foreach (Kid kid in kids)
                     {
-                        if (!allCarpools.Contains(c) && c.AdultId != adult.Id)
-                            allCarpools.Add(c);                                                
+                        List<Carpool> kidCarpools = this.GetKidCarpools(kid);
+                        if (kidCarpools != null)
+                        {
+                            foreach (Carpool c in kidCarpools)
+                            {
+                                if (!allCarpools.Contains(c) && c.AdultId != adult.Id)
+                                    allCarpools.Add(c);
+                            }
+                        }
+                        
                     }
-                }                
+                }                          
                 return allCarpools;
             }
             catch (Exception e)
