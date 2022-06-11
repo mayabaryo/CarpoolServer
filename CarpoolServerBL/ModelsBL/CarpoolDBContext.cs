@@ -566,7 +566,7 @@ namespace CarpoolServerBL.Models
             try
             {
                 List<KidsInCarpool> list = this.KidsInCarpools
-                    .Include(c => c.Carpool)
+                    .Include(c => c.Carpool).ThenInclude(a => a.Activity)
                     .Include(k => k.Kid)
                     .Include(k => k.Kid.KidsOfAdults)
                     .ThenInclude(k => k.Adult.IdNavigation)
